@@ -1,0 +1,23 @@
+{{- if (index .Values "kube-state-metrics" "enabled") }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: {{ printf "%s-%s" (include "vm-operator.fullname" $) "kube-state-metrics" | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $.Release.Namespace }}
+  labels: {{ include "vm-operator.labels" . | nindent 4 }}
+spec:
+  namespaceSelector:
+    matchNames:
+      -  {{ $.Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  endpoints:
+  - port: http
+    path: /metrics
+    honorLabels: true
+    metricRelabelConfigs:
+      - action: labeldrop
+        regex: (uid|container_id|image_id)
+  jobLabel: kube-state-metrics
+{{- end }}

@@ -1,0 +1,267 @@
+admissionWebhooks:
+  caBundle: ""
+  certManager:
+    enabled: false
+    issuer: {}
+  enabled: false
+  enabledCRDValidation:
+    vmagent: true
+    vmalert: false
+    vmalertmanager: false
+    vmalertmanagerConfig: false
+    vmauth: true
+    vmcluster: false
+    vmrule: false
+    vmsingle: false
+    vmuser: true
+  policy: Fail
+affinity: {}
+annotations: {}
+cleanupCRD: false
+cleanupImage:
+  pullPolicy: IfNotPresent
+  repository: gcr.io/google_containers/hyperkube
+  tag: v1.18.0
+coreDns:
+  enabled: true
+  service:
+    enabled: false
+    port: 9153
+    selector:
+      k8s-app: kube-dns
+    targetPort: 9153
+  spec:
+    endpoints:
+    - path: /metrics
+      port: metrics
+    jobLabel: coreDns
+    selector:
+      matchLabels:
+        k8s-app: kube-dns
+        kubernetes.io/name: CoreDNS
+crds:
+  enabled: true
+createCRD: true
+env:
+- name: VM_VMAGENTDEFAULT_CONFIGRELOADIMAGE
+  value: registry.playteam.ru/prometheus/prometheus-config-reloader:v0.68.0
+envFrom: []
+extraArgs: {}
+extraContainers: []
+extraHostPathMounts: []
+extraLabels: {}
+extraObjects: []
+extraVolumeMounts: []
+extraVolumes: []
+fullnameOverride: victoriametrics
+image:
+  pullPolicy: IfNotPresent
+  repository: registry.playteam.ru/victoriametrics/operator
+  tag: v0.41.1
+imagePullSecrets: []
+kube-state-metrics:
+  enabled: true
+  vmServiceScrape:
+    spec: {}
+kubeApiServer:
+  enabled: false
+  spec:
+    endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      path: /metrics
+      port: https
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        serverName: kubernetes
+    jobLabel: kubeApiServer
+    namespaceSelector:
+      matchNames:
+      - default
+    selector:
+      matchLabels:
+        component: apiserver
+        provider: kubernetes
+kubeControllerManager:
+  enabled: false
+  endpoints: []
+  service:
+    enabled: true
+    port: 10257
+    targetPort: 10257
+  spec:
+    endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      path: /metrics
+      port: http-metrics
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        serverName: kubernetes
+    jobLabel: kubeControllerManager
+kubeDns:
+  enabled: false
+  service:
+    dnsmasq:
+      port: 10054
+      targetPort: 10054
+    enabled: false
+    selector:
+      k8s-app: kube-dns
+    skydns:
+      port: 10055
+      targetPort: 10055
+  spec:
+    endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      port: http-metrics-dnsmasq
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      port: http-metrics-skydns
+kubeEtcd:
+  enabled: false
+  endpoints: []
+  service:
+    enabled: true
+    port: 2379
+    targetPort: 2379
+  spec:
+    endpoints:
+    - path: /metrics
+      port: http-metrics
+      scheme: http
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    jobLabel: kube-etcd
+kubeProxy:
+  enabled: false
+  endpoints: []
+  service:
+    enabled: true
+    port: 10249
+    targetPort: 10249
+  spec:
+    endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      path: /metrics
+      port: http-metrics
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    jobLabel: kubeProxy
+kubeScheduler:
+  enabled: false
+  endpoints: []
+  service:
+    enabled: true
+    port: 10259
+    targetPort: 10259
+  spec:
+    endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      path: /metrics
+      port: http-metrics
+      scheme: https
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    jobLabel: kubeScheduler
+kubelet:
+  cadvisor: true
+  enabled: true
+  probes: true
+  spec:
+    bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    honorLabels: true
+    honorTimestamps: false
+    interval: 30s
+    metricRelabelConfigs:
+    - action: labeldrop
+      regex: (uid)
+    - action: labeldrop
+      regex: (id|name)
+    - action: drop
+      regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+      source_labels:
+      - __name__
+    relabelConfigs:
+    - action: labelmap
+      regex: __meta_kubernetes_node_label_(.+)
+    - sourceLabels:
+      - __metrics_path__
+      targetLabel: metrics_path
+    - replacement: kubelet
+      targetLabel: job
+    scheme: https
+    scrapeTimeout: 5s
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecureSkipVerify: true
+logLevel: info
+nameOverride: ""
+nodeSelector: {}
+operator:
+  disable_prometheus_converter: false
+  enable_converter_ownership: false
+  prometheus_converter_add_argocd_ignore_annotations: false
+  psp_auto_creation_enabled: false
+  useCustomConfigReloader: false
+podDisruptionBudget:
+  enabled: false
+  labels: {}
+podLabels: {}
+podSecurityContext: {}
+prometheus-node-exporter:
+  enabled: true
+  extraArgs:
+  - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+  - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+  podLabels:
+    jobLabel: node-exporter
+  vmServiceScrape:
+    enabled: true
+    spec:
+      endpoints:
+      - metricRelabelConfigs:
+        - action: drop
+          regex: /var/lib/kubelet/pods.+
+          source_labels:
+          - mountpoint
+        path: /metrics
+        port: metrics
+      jobLabel: jobLabel
+rbac:
+  create: true
+  pspEnabled: true
+replicaCount: 1
+resources: {}
+securityContext: {}
+serviceAccount:
+  create: true
+  name: ""
+serviceMonitor:
+  annotations: {}
+  enabled: false
+  extraLabels: {}
+  relabelings: []
+tolerations: []
+topologySpreadConstraints: []
+vmagent:
+  externalLabels: {}
+  image:
+    repository: registry.playteam.ru/victoriametrics/vmagent
+    tag: v1.97.1
+  remoteWrite:
+  - url: https://buba.com
+  resources:
+    limits:
+      cpu: 2
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  shardCount: 3
+  spec:
+    promscrape.streamParse: "true"
+  tmpData:
+    enabled: false
+    path: /tmp
+watchNamespace: ""

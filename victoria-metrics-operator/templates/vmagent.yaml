@@ -1,0 +1,49 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  name: {{ include "vm-operator.fullname" . }}-vmagent
+spec:
+  externalLabels:
+{{- with .Values.vmagent.externalLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+  podMetadata:
+{{- with .Values.vmagent.podMetadata }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+  selectAllByDefault: true
+  remoteWrite:
+{{- with .Values.vmagent.remoteWrite }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+  # Replication:
+  scrapeInterval: 60s
+  shardCount: {{ .Values.vmagent.shardCount }}
+  statefulMode: true
+{{- with .Values.vmagent.extraArgs }}
+  extraArgs:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+  replicaCount: 2
+{{- with .Values.vmagent.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+{{- with .Values.vmagent.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+  image:
+    repository: {{ .Values.vmagent.image.repository }}
+    tag: {{ .Values.vmagent.image.tag }}
+  statefulRollingUpdateStrategy: OnDelete
+  resources:
+    {{- toYaml .Values.vmagent.resources | nindent 12 }}
+  {{- if .Values.vmagent.tmpData.enabled }}
+  volumes:
+  - name: metrics-storage
+    emptyDir: {}
+  volumeMounts:
+  - name: metrics-storage
+    mountPath: {{ .Values.vmagent.tmpData.path }}
+  {{- end }}
