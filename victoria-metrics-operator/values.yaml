@@ -44,7 +44,7 @@ crds:
 createCRD: true
 env:
 - name: VM_VMAGENTDEFAULT_CONFIGRELOADIMAGE
-  value: registry.playteam.ru/prometheus/prometheus-config-reloader:v0.68.0
+  value: quay.io/prometheus-operator/prometheus-config-reloader:v0.68.0
 envFrom: []
 extraArgs: {}
 extraContainers: []
@@ -247,7 +247,7 @@ topologySpreadConstraints: []
 vmagent:
   externalLabels: {}
   image:
-    repository: registry.playteam.ru/victoriametrics/vmagent
+    repository: docker.io/victoriametrics/vmagent
     tag: v1.97.1
   remoteWrite:
   - url: https://buba.com
