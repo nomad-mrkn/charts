@@ -883,8 +883,8 @@ image:
   base: ""
   pullPolicy: IfNotPresent
   pullSecrets: []
-  repository: registry.playteam.ru/timberio/vector
-  sha: c5a507194f5caa41bd4f1937bb51071ef69c422c3cf23b6d4c2fcf875b702cc0
+  repository: docker.io/timberio/vector
+  sha: ""
   tag: 0.46.1-alpine
 ingress:
   annotations: {}
