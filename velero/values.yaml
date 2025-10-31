@@ -9,6 +9,7 @@ affinity:
 annotations: {}
 backupsEnabled: true
 cleanUpCRDs: false
+installCRDs: true
 configMaps: {}
 configuration:
   backupStorageLocation:
