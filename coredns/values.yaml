@@ -1,0 +1,41 @@
+image:
+  repository: registry.playteam.ru/kubernetes/coredns
+  tag: 1.12.1
+  pullPolicy: IfNotPresent
+
+replicas: 2
+
+tolerations: []
+
+affinity:
+  nodeAffinity: []
+
+port: 53
+
+prometheus:
+  enabled: true
+  port: 9153
+
+DNSConfig:
+  Corefile: |
+    .:53 {
+        errors
+        health {
+            lameduck 5s
+        }
+        ready
+        log . {
+            class error
+        }
+        prometheus :9153
+
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+            pods insecure
+            fallthrough in-addr.arpa ip6.arpa
+        }
+        forward . /etc/resolv.conf
+        cache 30
+        loop
+        reload
+        loadbalance
+    }

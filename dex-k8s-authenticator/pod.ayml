@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: nginxtest 
+ labels:
+  env: test
+spec:
+ containers:
+ - name: nginx 
+   image: nginx 
+   imagePullPolicy: IfNotPresent
+ nodeName: k8s-cluster1-master1

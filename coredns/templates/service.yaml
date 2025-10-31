@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-dns
+  namespace: kube-system
+  annotations:
+    prometheus.io/scrape: "{{ .Values.prometheus.enabled }}"
+    prometheus.io/port: "{{ .Values.prometheus.port }}"
+  labels:
+    k8s-app: kube-dns
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "CoreDNS"
+spec:
+  selector:
+    k8s-app: kube-dns
+  ports:
+    - name: dns
+      port: {{ .Values.port }}
+      protocol: UDP
+    - name: dns-tcp
+      port: {{ .Values.port }}
+      protocol: TCP
+    - name: metrics
+      port: {{ .Values.prometheus.port }}
+      protocol: TCP

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  {{- range $key, $value := .Values.DNSConfig }}
+  {{ $key }}: |-
+    {{- tpl $value $ | nindent 4 }}
+  {{- end }}
