@@ -1,0 +1,30 @@
+{{- if .Values.vmServiceScrape.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: {{ include "velero.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "velero.name" . }}
+    app.kubernetes.io/instance: {{ include "velero.name" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "velero.chart" . }}
+spec:
+  namespaceSelector:
+    matchNames:
+      -  {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "velero.name" . }}
+  endpoints:
+  - interval: {{ .Values.vmServiceScrape.interval }}
+    scrapeTimeout: {{ .Values.vmServiceScrape.scrapeTimeout }}
+    port: http-monitoring
+    path: "/metrics"
+    honorLabels: {{ .Values.vmServiceScrape.honorLabels }}
+    {{- if .Values.vmServiceScrape.relabelings }}
+    relabelings:
+      {{- toYaml .Values.vmServiceScrape.relabelings | nindent 8 }}
+    {{- end }}
+  jobLabel: {{ include "velero.name" . }}
+{{- end }}

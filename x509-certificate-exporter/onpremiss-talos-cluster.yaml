@@ -1,0 +1,13 @@
+hostPathsExporter:
+  daemonSets:
+    cp:
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      watchFiles:
+      - /var/lib/kubelet/pki/kubelet-client-current.pem
+      - /var/lib/kubelet/pki/kubelet-client-current.pem
+      - /etc/kubernetes/pki/ca.crt

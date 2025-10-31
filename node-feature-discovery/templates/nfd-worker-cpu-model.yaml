@@ -1,0 +1,77 @@
+{{- if .Values.workercpumodel.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "node-feature-discovery.fullname" . }}-worker-cpu-model
+  namespace: {{ include "node-feature-discovery.namespace" . }}
+  labels:
+  {{- include "node-feature-discovery.labels" . | nindent 4 }}
+data:
+  cpu-model.sh: |-
+    #!/bin/sh
+
+    CPU_TIERS="
+    {{- range .Values.workercpumodel.cpuTiers }}
+    {{ .model }}|{{ .tier }}
+    {{- end }}
+    "
+
+    DEFAULT_TIER="{{ .Values.workercpumodel.defaultCpuTiers }}"
+
+    OUTPUT_DIR="/etc/kubernetes/node-feature-discovery/features.d"
+    OUTPUT_FILE="$OUTPUT_DIR/nfd-plugin-cpu-model"
+    mkdir -p "$OUTPUT_DIR"
+    FOUND_MATCH=false
+
+    while true; do
+      MODEL_NAME=$(grep -m1 'model name' /proc/cpuinfo | sed 's/.*: //' | tr -d '"')
+
+      TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+      STATUS="processing"
+      MATCHED_PATTERN="null"
+      MATCHED_TIER="$DEFAULT_TIER"
+
+      generate_json_log() {
+        cat <<EOF
+    {
+      "timestamp": "$TIMESTAMP",
+      "cpu_model": "$MODEL_NAME",
+      "detected_tier": "$MATCHED_TIER",
+      "default_tier": "$DEFAULT_TIER",
+      "action": "cpu_tier_detection",
+      "status": "$STATUS",
+      "matched_pattern": $MATCHED_PATTERN,
+      "output_file": "$OUTPUT_FILE"
+    }
+    EOF
+      }
+
+      IFS='
+    '
+
+      for entry in $CPU_TIERS; do
+          if [ -n "$entry" ]; then
+              model=$(echo "$entry" | cut -d'|' -f1)
+              tier=$(echo "$entry" | cut -d'|' -f2)
+              
+              if echo "$MODEL_NAME" | grep -q "$model"; then
+                  MATCHED_TIER="$tier"
+                  MATCHED_PATTERN="\"$model\""
+                  STATUS="matched"
+                  FOUND_MATCH=true
+                  generate_json_log
+                  break
+              fi
+          fi
+      done
+
+      if [ "$FOUND_MATCH" = false ]; then
+          STATUS="nomatched"
+          generate_json_log
+      fi
+
+      echo "feature.node.kubernetes.io/custom-cpu-model=$MATCHED_TIER" > "$OUTPUT_FILE"
+      sleep 3600
+    done
+
+{{- end }}

@@ -1,0 +1,234 @@
+featureGates:
+  NodeFeatureGroupAPI: false
+fullnameOverride: ""
+gc:
+  affinity: {}
+  annotations: {}
+  deploymentAnnotations: {}
+  enable: true
+  extraArgs: []
+  extraEnvs: []
+  hostNetwork: false
+  interval: 1h
+  metricsPort: 8081
+  nodeSelector: {}
+  podSecurityContext: {}
+  rbac:
+    create: true
+  replicaCount: 1
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      cpu: 10m
+      memory: 128Mi
+  revisionHistoryLimit: null
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: null
+  tolerations: []
+image:
+  pullPolicy: IfNotPresent
+  repository: registry.playteam.ru/kubernetes/node-feature-discovery
+imagePullSecrets: []
+master:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions:
+          - key: node-role.kubernetes.io/master
+            operator: In
+            values:
+            - ""
+        weight: 1
+      - preference:
+          matchExpressions:
+          - key: node-role.kubernetes.io/control-plane
+            operator: In
+            values:
+            - ""
+        weight: 1
+  annotations: {}
+  config: null
+  denyLabelNs: []
+  deploymentAnnotations: {}
+  enable: true
+  enableTaints: false
+  extraArgs: []
+  extraEnvs: []
+  extraLabelNs: []
+  featureApi: null
+  featureRulesController: null
+  healthPort: 8082
+  hostNetwork: false
+  instance: null
+  livenessProbe:
+    grpc:
+      port: 8082
+  metricsPort: 8081
+  nfdApiParallelism: null
+  nodeSelector: {}
+  podSecurityContext: {}
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    grpc:
+      port: 8082
+  replicaCount: 1
+  resources:
+    limits:
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  resyncPeriod: null
+  revisionHistoryLimit: null
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: null
+  startupProbe:
+    failureThreshold: 30
+    grpc:
+      port: 8082
+  tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+    operator: Equal
+    value: ""
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+    operator: Equal
+    value: ""
+nameOverride: ""
+namespaceOverride: ""
+priorityClassName: ""
+prometheus:
+  enable: false
+  labels: {}
+  scrapeInterval: 10s
+topologyUpdater:
+  affinity: {}
+  annotations: {}
+  config: null
+  createCRDs: false
+  daemonsetAnnotations: {}
+  enable: false
+  extraArgs: []
+  extraEnvs: []
+  healthPort: 8082
+  hostNetwork: false
+  kubeletConfigPath: null
+  kubeletPodResourcesSockPath: null
+  kubeletStateDir: /var/lib/kubelet
+  livenessProbe:
+    grpc:
+      port: 8082
+    initialDelaySeconds: 10
+  metricsPort: 8081
+  nodeSelector: {}
+  podSecurityContext: {}
+  podSetFingerprint: true
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    grpc:
+      port: 8082
+    initialDelaySeconds: 5
+  resources:
+    limits:
+      memory: 60Mi
+    requests:
+      cpu: 50m
+      memory: 40Mi
+  revisionHistoryLimit: null
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: true
+    runAsUser: 0
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: null
+  tolerations: []
+  updateInterval: 60s
+  watchNamespace: '*'
+worker:
+  affinity: {}
+  annotations: {}
+  config:
+    core:
+      labelSources:
+      - custom
+      - local
+      sleepInterval: 60s
+  daemonsetAnnotations: {}
+  enable: true
+  extraArgs: []
+  extraEnvs: []
+  healthPort: 8082
+  hostNetwork: false
+  livenessProbe:
+    grpc:
+      port: 8082
+    initialDelaySeconds: 10
+  metricsPort: 8081
+  mountUsrSrc: false
+  nodeSelector: {}
+  podSecurityContext: {}
+  priorityClassName: ""
+  rbac:
+    create: true
+  readinessProbe:
+    failureThreshold: 10
+    grpc:
+      port: 8082
+    initialDelaySeconds: 5
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      cpu: 5m
+      memory: 64Mi
+  revisionHistoryLimit: null
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: null
+  tolerations: []
+workercpumodel:
+  cpuTiers:
+  - model: Intel(R) Xeon(R) Gold 6230 CPU @ 2.10GHz
+    tier: tier1
+  - model: Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz
+    tier: tier1
+  - model: Intel(R) Xeon(R) Gold 6338 CPU @ 2.00GHz
+    tier: tier2
+  - model: Intel(R) Xeon(R) Gold 6430 2.1GHz
+    tier: tier2
+  defaultCpuTiers: tier1
+  enable: true
+  image:
+    repository: registry.playteam.ru/alpine
+    tag: 3.17

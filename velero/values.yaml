@@ -1,0 +1,169 @@
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - preference:
+        matchExpressions:
+        - key: node-role.kubernetes.io/infr
+          operator: Exists
+      weight: 1
+annotations: {}
+backupsEnabled: true
+cleanUpCRDs: false
+configMaps: {}
+configuration:
+  backupStorageLocation:
+    accessMode: ReadWrite
+    bucket: k8s-backups
+    caCert: null
+    config:
+      region: ru-moscow
+      s3ForcePathStyle: false
+      s3Url: https://obs.ru-moscow-1.hc.sbercloud.ru
+    default: true
+    name: default
+    prefix: null
+    provider: aws
+  backupSyncPeriod: null
+  clientBurst: null
+  clientPageSize: null
+  clientQPS: null
+  defaultResticPruneFrequency: null
+  defaultVolumesToRestic: null
+  disableControllers: null
+  extraEnvVars: {}
+  features: null
+  logFormat: null
+  logLevel: null
+  provider: aws
+  resticTimeout: null
+  restoreOnlyMode: null
+  restoreResourcePriorities: null
+  storeValidationFrequency: null
+  volumeSnapshotLocation:
+    config: {}
+    name: null
+    provider: null
+containerSecurityContext: {}
+credentials:
+  existingSecret: velero-cloud-secret
+  extraEnvVars: {}
+  extraSecretRef: ""
+  name: velero-cloud-secret
+  secretContents: {}
+  useSecret: true
+deployRestic: false
+dnsConfig: {}
+dnsPolicy: ClusterFirst
+extraObjects: []
+extraVolumeMounts: []
+extraVolumes: []
+hostAliases:
+- hostnames:
+  - obs.ru-moscow-1.hc.sbercloud.ru
+  ip: 100.125.35.29
+image:
+  imagePullSecrets: []
+  pullPolicy: IfNotPresent
+  repository: registry.playteam.ru/velero
+  tag: v1.9.2-765
+initContainers:
+- image: registry.playteam.ru/velero/aws:v1.3.0-765
+  imagePullPolicy: IfNotPresent
+  name: velero-plugin-for-aws
+  volumeMounts:
+  - mountPath: /target
+    name: plugins
+kubectl:
+  annotations: {}
+  containerSecurityContext: {}
+  image:
+    repository: registry.playteam.ru/kubectl
+    tag: 1.26.4
+  labels: {}
+  resources: {}
+labels: {}
+lifecycle: {}
+metrics:
+  enabled: true
+  podAnnotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8085"
+    prometheus.io/scrape: "true"
+  prometheusRule:
+    additionalLabels: {}
+    enabled: false
+    spec: []
+  scrapeInterval: 30s
+  scrapeTimeout: 10s
+  service:
+    annotations: {}
+    labels: {}
+  serviceMonitor:
+    additionalLabels:
+      monitor: "true"
+    enabled: false
+nodeSelector: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+priorityClassName: ""
+rbac:
+  clusterAdministrator: true
+  clusterAdministratorName: cluster-admin
+  create: true
+resources:
+  limits:
+    cpu: 4000m
+    memory: 8Gi
+  requests:
+    cpu: 500m
+    memory: 128Mi
+restic:
+  affinity: {}
+  annotations: {}
+  containerSecurityContext: {}
+  dnsConfig: {}
+  dnsPolicy: ClusterFirst
+  extraEnvVars: {}
+  extraVolumeMounts: []
+  extraVolumes: []
+  labels: {}
+  lifecycle: {}
+  nodeSelector: {}
+  podSecurityContext:
+    runAsUser: 0
+  podVolumePath: /var/lib/kubelet/pods
+  priorityClassName: ""
+  privileged: false
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  tolerations: []
+  useScratchEmptyDir: true
+serviceAccount:
+  server:
+    annotations: null
+    create: true
+    labels: null
+    name: null
+snapshotsEnabled: false
+tolerations:
+- effect: NoSchedule
+  key: node-role.kubernetes.io/infr
+  operator: Exists
+upgradeCRDs: false
+vault:
+- name: velero-cloud-secret
+  path: secret/internal/devops/velero
+  type: Opaque
+vmServiceScrape:
+  enabled: true
+  honorLabels: true
+  interval: 60s
+  labels: {}
+  relabelings: []
+  scrapeTimeout: 10s

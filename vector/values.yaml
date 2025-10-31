@@ -1,0 +1,1001 @@
+affinity: {}
+args:
+- --config-dir
+- /etc/vector/
+autoscaling:
+  annotations: {}
+  behavior: {}
+  customMetric: {}
+  enabled: false
+  external: false
+  maxReplicas: 10
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: null
+command: []
+commonLabels: {}
+containerPorts:
+- containerPort: 5170
+  hostPort: 5170
+  name: talos-logs
+  protocol: TCP
+- containerPort: 9090
+  name: prom-exporter
+  protocol: TCP
+customConfig:
+  data_dir: /vector-data-dir
+  sinks:
+    kafka_approved_logs:
+      acknowledgements:
+        enabled: true
+      batch:
+        max_events: 100
+        timeout_secs: 1
+      bootstrap_servers: '{{ .Values.okkoKafkaLogs }}'
+      buffer:
+        max_events: 5000
+        type: memory
+        when_full: block
+      encoding:
+        codec: json
+        json:
+          pretty: false
+      healthcheck_topic: unified_dead_letter
+      inputs:
+      - calico
+      - coredns
+      - jaeger_agent
+      - jaeger_operator
+      - keda_operator
+      - kube_api_server
+      - kube_controller_manager
+      - kubernetes_ingress_controller
+      - kubernetes_ingress_controller_error
+      - kyverno
+      - linkerd_policy
+      - linkerd_proxy
+      - linkerd_proxy_error
+      - linkerd_proxy_injector
+      - linkerd_tap_injector
+      - nginx_set_index_prefix_and_dest_index
+      - okko_components
+      - kube_audit_prepare
+      - talos_apid
+      - talos_controller_runtime
+      - talos_cri
+      - talos_etcd
+      - talos_kernel
+      - talos_kubelet
+      - talos_machined
+      - vault
+      - velero
+      - victoriametrics
+      topic: '{{ "{{ topic }}" }}'
+      type: kafka
+    kafka_dead_letter:
+      acknowledgements:
+        enabled: true
+      bootstrap_servers: '{{ .Values.okkoKafkaLogs }}'
+      encoding:
+        codec: json
+        json:
+          pretty: false
+      healthcheck_topic: unified_dead_letter
+      inputs:
+      - calico.dropped
+      - coredns.dropped
+      - jaeger_agent.dropped
+      - jaeger_operator.dropped
+      - keda_operator.dropped
+      - kube_api_server.dropped
+      - kube_audit_prepare.dropped
+      - kube_controller_manager.dropped
+      - kubernetes_ingress_controller.dropped
+      - kubernetes_ingress_controller_error.dropped
+      - kyverno.dropped
+      - linkerd_policy.dropped
+      - linkerd_proxy_injector.dropped
+      - linkerd_proxy.dropped
+      - linkerd_proxy_error.dropped
+      - linkerd_tap_injector.dropped
+      - nginx.dropped
+      - nginx_error.dropped
+      - nginx_set_index_prefix_and_dest_index.dropped
+      - okko_components.dropped
+      - talos_apid.dropped
+      - talos_controller_runtime.dropped
+      - talos_cri.dropped
+      - talos_etcd.dropped
+      - talos_kernel.dropped
+      - talos_kubelet.dropped
+      - talos_machined.dropped
+      - vault.dropped
+      - victoriametrics.dropped
+      - velero.dropped
+      topic: unified_dead_letter
+      type: kafka
+    kafka_unapproved_logs:
+      acknowledgements:
+        enabled: true
+      batch:
+        max_events: 100
+        timeout_secs: 1
+      bootstrap_servers: '{{ .Values.okkoKafkaLogs }}'
+      buffer:
+        max_events: 5000
+        type: memory
+        when_full: block
+      encoding:
+        codec: json
+        json:
+          pretty: false
+      healthcheck_topic: unified_dead_letter
+      inputs:
+      - message_not_in_json_unmatched
+      - message_not_unified_unmatched
+      - prepare_kubernetes_metadata.dropped
+      - prepare_talos.dropped
+      - talos_routing_unmatched
+      topic: unified_dead_letter
+      type: kafka
+    kafka_vector_logs:
+      acknowledgements:
+        enabled: true
+      bootstrap_servers: '{{ .Values.okkoKafkaLogs }}'
+      encoding:
+        codec: json
+        json:
+          pretty: false
+      healthcheck_topic: unified_dead_letter
+      inputs:
+      - vector_logs_prepare
+      topic: '{{ "{{ topic }}" }}'
+      type: kafka
+    prom-exporter:
+      address: 0.0.0.0:9090
+      inputs:
+      - vector_metrics
+      type: prometheus_exporter
+  sources:
+    container_logs:
+      type: kubernetes_logs
+    kube_audit_logs:
+      ignore_not_found: true
+      include:
+      - /var/log/audit/kube/*.log
+      type: file
+    talos_logs:
+      address: 0.0.0.0:5170
+      decoding:
+        codec: json
+      mode: tcp
+      type: socket
+    vector_logs:
+      host_key: ""
+      type: internal_logs
+    vector_metrics:
+      scrape_interval_secs: 60
+      type: internal_metrics
+  transforms:
+    calico:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.calico
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.subtype = .k8s.container_name
+        .delivery_info.type = "calico"
+        .dest_index = "k8s_calico_logs"
+        .topic = "kubernetes.calico"
+        parsed, err = parse_regex(string!(.message), r'(?<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3})\s\[(?<log_level>\w+?)\]\[\d+\]\s(?<module>[^ ]+?)\s\d+?: (?<message>.*)$')
+        if err == null {
+          .delivery_info.module = parsed.module
+          .log_level = parsed.log_level
+          .message = parsed.message
+          .timestamp = to_unix_timestamp(parse_timestamp!(parsed.date, "%Y-%m-%d %H:%M:%S%.3f"), unit: "milliseconds")
+        } else {
+          .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+        }
+      type: remap
+    coredns:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.coredns
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.type = "coredns"
+        .dest_index = "k8s_coredns_logs"
+        .topic = "kubernetes.coredns"
+        parsed, err = parse_regex(string!(.message), r'^\[(?<log_level>[^\]]+)\]\s(?<dns_type>[^\s]+)\s(?<dns_class>[^\s]+)\s(?<dns_name>[^\s]+)\sns:(?<dns_client_namespace>[^\s]+)\spod:(?<dns_client_pod_name>[^\s]+)\sstatus:(?<dns_status>\w+)$')
+        if err == null {
+          .log_level = parsed.log_level
+          .network.client_namespace = parsed.dns_client_namespace
+          .network.client_pod_name = parsed.dns_client_pod_name
+          .request.class = parsed.dns_class
+          .request.host = parsed.dns_name
+          .request.type = parsed.dns_type
+          .response.status = parsed.dns_status
+          del(.message)
+        } else {
+          parsed = parse_regex!(string!(.message), r'^\[(?<log_level>[^\]]+)\]\s(?<message_without_log_level>.*)$')
+          .log_level = parsed.log_level
+          .message = parsed.message_without_log_level
+        }
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+    jaeger_agent:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.jaeger_agent
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.module = .caller
+        .delivery_info.subtype = .k8s.container_name
+        .delivery_info.type = "jaeger"
+        .dest_index = "k8s_jaeger_logs"
+        .log_level = .level
+        .message = .msg
+        .timestamp = floor(to_float!(.ts) * 1000)
+        .topic = "kubernetes.jaeger"
+        del(.ts)
+        del(.caller)
+        del(.grpc_log)
+        del(.level)
+      type: remap
+    jaeger_operator:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.jaeger_operator
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.subtype = .k8s.container_name
+        .delivery_info.type = "jaeger"
+        .dest_index = "k8s_jaeger_logs"
+        .topic = "kubernetes.jaeger"
+        parsed = parse_regex!(string!(.message), r'^(?<date>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)\s(?<log_level>[^\s]+)\s(?<message>.*)$')
+        .log_level = parsed.log_level
+        .message = parsed.message
+        .timestamp = to_unix_timestamp(parse_timestamp!(parsed.date, "%+"), unit: "milliseconds")
+      type: remap
+    keda_operator:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.keda_operator
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.type = "keda"
+        .dest_index = "k8s_keda_logs"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+        .topic = "kubernetes.keda_operator"
+      type: remap
+    kube_api_server:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.kube_api_server
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.type = "kube-api-server"
+        .dest_index = "k8s_kube_api_logs"
+        .topic = "kubernetes.kube_api_server"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+    kube_audit_prepare:
+      drop_on_error: true
+      inputs:
+      - kube_audit_logs
+      reroute_dropped: true
+      source: |-
+        .message = parse_json!(.message)
+        .message.timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+        . = .message
+        .datacenter = "{{ .Values.okkoDatacenter }}"
+        .k8s.cluster_name = "{{ .Values.okkoK8sClusterName }}"
+        .k8s.worker = "${VECTOR_SELF_NODE_NAME:?empty vector self node name variable}"
+        .env = "{{ .Values.okkoEnv }}"
+        .hostname = "${VECTOR_SELF_NODE_NAME:?empty vector self node name variable}"
+        .topic = "kubernetes.audit"
+      type: remap
+    kube_controller_manager:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.kube_controller_manager
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.type = "kube-controller-manager"
+        .dest_index = "k8s_controller_manager_logs"
+        .topic = "kubernetes.kube_controller_manager"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+    kubernetes_ingress_controller:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.kubernetes_ingress_controller
+      reroute_dropped: true
+      source: |-
+        .delivery_info.content_type = "access"
+        .dest_index = "ingress_haproxy_access"
+        .topic = "unified_ingress_haproxy"
+      type: remap
+    kubernetes_ingress_controller_error:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.kubernetes_ingress_controller_error
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.content_type = "error"
+        .delivery_info.subtype = "ingress"
+        .delivery_info.type = "haproxy"
+        .dest_index = "ingress_haproxy_error"
+        .topic = "unified_ingress_haproxy"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+    kyverno:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.kyverno
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.type = "kyverno"
+        .dest_index = "k8s_kyverno_logs"
+        .topic = "kubernetes.kyverno"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+    linkerd_policy:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.linkerd_policy
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.subtype = "linkerd-policy"
+        .delivery_info.type = "linkerd"
+        .dest_index = "k8s_linkerd_policy_logs"
+        .topic = "kubernetes.linkerd_policy"
+        parsed = parse_regex!(string!(.message), r'^(?<date>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z)\s+(?<log_level>[^\s]+)\s(?<message>.*)$')
+        .log_level = parsed.log_level
+        .message = parsed.message
+        .timestamp = to_unix_timestamp(parse_timestamp!(parsed.date, "%+"), unit: "milliseconds")
+      type: remap
+    linkerd_proxy:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.linkerd_proxy
+      reroute_dropped: true
+      source: |-
+        .message.datacenter = .datacenter
+        .message.delivery_info = .delivery_info
+        .message.env = .env
+        .message.k8s = .k8s
+        .message.linkerd = .linkerd
+        .message.bytes.received = .request_bytes
+        .message.bytes.sent = .response_bytes
+        .message.delivery_info.content_type = "access"
+        .message.delivery_info.subtype = "linkerd-proxy"
+        .message.delivery_info.type = "linkerd-proxy"
+        .message.delivery_info.type = "linkerd"
+        .message.dest_index = "k8s_linkerd_proxy_access"
+        .message.headers."user-agent" = .user_agent
+        .message.network.client_name = ."client.id"
+        .message.network.real_ip = ."client_addr"
+        .message.request.method = .method
+        .message.request.protocol = .version
+        .message.request.uri = .uri
+        .message.response.status = .status
+        .message.time.processing = to_string(floor(to_int!(.processing_ns) / 1000))
+        .message.time.total = to_string(floor(to_int!(.total_ns) / 1000))
+        .message.timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+        .message.topic = "kubernetes.linkerd_proxy"
+        .message.tracing.trace_id = .trace_id
+        if (exists(.linkerd)) {
+          .message.linkerd = .linkerd
+        }
+        . = .message
+      type: remap
+    linkerd_proxy_error:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.linkerd_proxy_error
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.content_type = "error"
+        .delivery_info.subtype = "linkerd-proxy"
+        .delivery_info.type = "linkerd"
+        .dest_index = "k8s_linkerd_proxy_error"
+        .topic = "kubernetes.linkerd_proxy"
+        parsed = parse_regex!(string!(.message), r'^\[[0-9\.s]+\]\s+(?<log_level>[^\s]+)\s+([^\s]+)\s(?<message>.*)$')
+        .log_level = parsed.log_level
+        .message = parsed.message
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+    linkerd_proxy_injector:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.linkerd_proxy_injector
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .topic = "kubernetes.linkerd_proxy_injector"
+        .delivery_info.subtype = "linkerd-proxy-injector"
+        .delivery_info.type = "linkerd"
+        .dest_index = "k8s_linkerd_proxy_injector_logs"
+        parsed = parse_regex!(string!(.message), r'^time="(?<date>[^"]+)"\slevel=(?<log_level>[^"]+)\smsg="(?<message>.+)"$')
+        .log_level = parsed.log_level
+        .message = parsed.message
+        .timestamp = to_unix_timestamp(parse_timestamp!(parsed.date, "%+"), unit: "milliseconds")
+      type: remap
+    linkerd_tap_injector:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.linkerd_tap_injector
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.subtype = "linkerd-tap-injector"
+        .delivery_info.type = "linkerd"
+        .dest_index = "k8s_linkerd_tap_injector_logs"
+        .topic = "kubernetes.linkerd_tap_injector"
+        parsed = parse_regex!(string!(.message), r'^time="(?<date>[^"]+)"\slevel=(?<log_level>[^"]+)\smsg="(?<message>.+)"$')
+        .log_level = parsed.log_level
+        .message = parsed.message
+        .timestamp = to_unix_timestamp(parse_timestamp!(parsed.date, "%+"), unit: "milliseconds")
+      type: remap
+    message_in_json:
+      drop_on_error: true
+      inputs:
+      - prepare_kubernetes_metadata
+      reroute_dropped: true
+      source: |-
+        .message = parse_json!(string!(.message))
+        .message.datacenter = .datacenter
+        .message.delivery_info.feature = .delivery_info.feature
+        .message.hostname = .hostname
+        .message.k8s = .k8s
+        .message.env = .env
+        if (exists(.linkerd)) {
+          .message.linkerd = .linkerd
+        }
+        if (!exists(.message.timestamp) && !exists(.message.epoch_timestamp)) {
+          .message.timestamp = .timestamp
+        }
+        . = .message
+      type: remap
+    message_not_in_json_unmatched:
+      inputs:
+      - message_not_json_routing._unmatched
+      source: .dropped_in_k8s = "NOT_JSON"
+      type: remap
+    message_not_json_routing:
+      inputs:
+      - message_in_json.dropped
+      reroute_unmatched: true
+      route:
+        calico: .k8s.container_name == "calico-node" || .k8s.container_name == "calico-kube-controllers"
+        coredns: .k8s.container_name == "coredns"
+        fluent_bit: .k8s.container_name == "fluent-bit"
+        jaeger_operator: .k8s.container_name == "jaeger-operator"
+        keda_operator: .k8s.container_name == "keda-operator"
+        kubernetes_ingress_controller_error: .k8s.container_name == "kubernetes-ingress-controller"
+        linkerd_policy: .k8s.container_name == "policy" && .k8s.namespace == "linkerd"
+        linkerd_proxy_error: .k8s.container_name == "linkerd-proxy"
+        linkerd_proxy_injector: .k8s.container_name == "proxy-injector"
+        linkerd_tap_injector: .k8s.container_name == "tap-injector"
+        nginx: .k8s.container_name == "nginx"
+        velero: .k8s.container_name == "velero"
+      type: route
+    message_not_unified_unmatched:
+      inputs:
+      - unified_log_format_routing._unmatched
+      source: .dropped_in_k8s = "NOT_CHOOSED_UNIFIED"
+      type: remap
+    nginx:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.nginx
+      reroute_dropped: true
+      source: .dest_index = "_nginx_access"
+      type: remap
+    nginx_error:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.nginx
+      reroute_dropped: true
+      source: |-
+        .delivery_info.type = "nginx"
+        .dest_index = "_nginx_error"
+        parsed, err = parse_regex(string!(.message), r'^(?P<error_timestamp>[\d+/ :]+) \[(?P<error_log_level>.+)\] (?P<error_pid>[^\s]+): (?:\*\d+ )?(?P<error_message>.+), client: (?P<error_network_real_ip>[0-9\.]+), server: (?P<error_server>[^ ]+)?(?:, request: \"(?P<error_method>[^ ]+) (?P<error_path>[^ ]+) (?P<error_protocol>[^ ]+)\")?(?:, subrequest: \"(?P<error_subrequest>[^ ]+)\")?(?:, upstream: \"(?P<error_upstream>[^ ]+)\".*)?(?:, host: \"(?P<error_host>[^ ]+)\")?(?:, referrer: \"(?P<error_referrer>[^ ]+)\")?$')
+        if err == null {
+          .log_level = parsed.error_log_level
+          .message = parsed.error_message
+          .network.real_ip = parsed.error_network_real_ip
+          .process.pid = parsed.error_pid
+          .request.host = parsed.error_host
+          .request.method = parsed.error_method
+          .request.protocol = parsed.error_protocol
+          .request.uri = parsed.error_path
+          .timestamp = parsed.error_timestamp
+        } else {
+          parsed = parse_regex!(string!(.message), r'^(?P<error_timestamp>[\d+/ :]+) \[(?P<error_log_level>.+)\] (?<message>.*)$')
+          .log_level = parsed.error_log_level
+          .message = parsed.message
+          .timestamp = parsed.error_timestamp
+        }
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%Y/%m/%d %H:%M:%S"), unit: "milliseconds")
+      type: remap
+    nginx_set_index_prefix_and_dest_index:
+      drop_on_error: true
+      inputs:
+      - nginx
+      - nginx_error
+      reroute_dropped: true
+      source: |-
+        .topic = "kubernetes.nginx"
+        if (exists(.k8s.component_name)) {
+          .index_prefix = string!(.k8s.component_name)
+        } else {
+          .index_prefix = string!(.k8s.namespace)
+        }
+        .dest_index = .index_prefix + string!(.dest_index)
+      type: remap
+    okko_components:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.okko_components
+      reroute_dropped: true
+      source: |-
+        .timestamp = .epoch_timestamp
+        .topic = "unified_okko_components"
+      type: remap
+    prepare_kubernetes_metadata:
+      drop_on_error: true
+      inputs:
+      - container_logs
+      reroute_dropped: true
+      source: |-
+        .datacenter = "{{ .Values.okkoDatacenter }}"
+        .env = "{{ .Values.okkoEnv }}"
+        .hostname = .kubernetes.pod_node_name
+        .k8s.cluster_name = "{{ .Values.okkoK8sClusterName }}"
+        .k8s.container_image = .kubernetes.container_image
+        .k8s.container_name = .kubernetes.container_name
+        .k8s.namespace = .kubernetes.pod_namespace
+        .k8s.pod_id = .kubernetes.pod_uid
+        .k8s.pod_ip = .kubernetes.pod_ip
+        .k8s.pod_name = .kubernetes.pod_name
+        .k8s.worker = .kubernetes.pod_node_name
+        if (exists(.kubernetes.pod_annotations."linkerd.io/inject")) {
+          .linkerd.inject = .kubernetes.pod_annotations."linkerd.io/inject"
+        }
+        if (exists(.kubernetes.pod_annotations."linkerd.io/proxy-version")) {
+          .linkerd.proxy_version = .kubernetes.pod_annotations."linkerd.io/proxy-version"
+        }
+        if (exists(.kubernetes.pod_labels."component.okko.io/name")) {
+          .k8s.component_name = .kubernetes.pod_labels."component.okko.io/name"
+        }
+        del(.file)
+        del(.kubernetes)
+        del(.source_type)
+        del(.stream)
+      type: remap
+    prepare_talos:
+      drop_on_error: true
+      inputs:
+      - talos_logs
+      reroute_dropped: true
+      source: |-
+        .datacenter = "{{ .Values.okkoDatacenter }}"
+        .delivery_info.subtype = ."talos-service"
+        .delivery_info.type = "talos"
+        .dest_index = "k8s_talos_logs"
+        .env = "{{ .Values.okkoEnv }}"
+        .hostname = .host
+        .k8s.cluster_name = "{{ .Values.okkoK8sClusterName }}"
+        .log_level = ."talos-level"
+        .timestamp = to_unix_timestamp(parse_timestamp!(."talos-time", "%+"), unit: "milliseconds")
+        .topic = "kubernetes.talos"
+        del(.host)
+        del(."talos-level")
+        del(."talos-service")
+        del(."talos-time")
+        del(.port)
+        del(.size)
+        del(.source_type)
+        del(.v)
+      type: remap
+    talos_apid:
+      drop_on_error: true
+      inputs:
+      - talos_routing.apid
+      reroute_dropped: true
+      source: |-
+        .message = .msg
+        del(.msg)
+      type: remap
+    talos_controller_runtime:
+      drop_on_error: true
+      inputs:
+      - talos_routing.controller_runtime
+      reroute_dropped: true
+      source: |-
+        .delivery_info.module = .controller
+        parsed = parse_regex!(string!(.msg), r'^(?<date>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)\s+[^\s]+\s(?<message>.*)$')
+        .message = parsed.message
+        .timestamp = to_unix_timestamp(parse_timestamp!(parsed.date, "%+"), unit: "milliseconds")
+        del(.controller)
+        del(.msg)
+      type: remap
+    talos_cri:
+      drop_on_error: true
+      inputs:
+      - talos_routing.cri
+      reroute_dropped: true
+      source: |-
+        .message = .msg
+        del(.msg)
+      type: remap
+    talos_etcd:
+      drop_on_error: true
+      inputs:
+      - talos_routing.etcd
+      reroute_dropped: true
+      source: |-
+        .delivery_info.module = .caller
+        .message = .msg
+        del(.msg)
+        del(.caller)
+      type: remap
+    talos_kernel:
+      drop_on_error: true
+      inputs:
+      - talos_routing.kernel
+      reroute_dropped: true
+      source: |-
+        .delivery_info.subtype = "kernel"
+        .message = .msg
+        del(.clock)
+        del(.facility)
+        del(.priority)
+        del(.seq)
+        del(.msg)
+      type: remap
+    talos_kubelet:
+      drop_on_error: true
+      inputs:
+      - talos_routing.kubelet
+      reroute_dropped: true
+      source: |-
+        .message = .msg
+        del(.msg)
+      type: remap
+    talos_machined:
+      drop_on_error: true
+      inputs:
+      - talos_routing.machined
+      reroute_dropped: true
+      source: |-
+        .message = .msg
+        del(.msg)
+      type: remap
+    talos_routing:
+      inputs:
+      - prepare_talos
+      route:
+        apid: .delivery_info.subtype == "apid"
+        controller_runtime: .delivery_info.subtype == "controller-runtime"
+        cri: .delivery_info.subtype == "cri"
+        etcd: .delivery_info.subtype == "etcd"
+        kernel: .delivery_info.subtype == null && .facility == "kern"
+        kubelet: .delivery_info.subtype == "kubelet"
+        machined: .delivery_info.subtype == "machined"
+      type: route
+    talos_routing_unmatched:
+      inputs:
+      - talos_routing._unmatched
+      source: .dropped_in_k8s = "TALOS_UNMATCHED"
+      type: remap
+    unified_log_format_routing:
+      inputs:
+      - message_in_json
+      reroute_unmatched: true
+      route:
+        fluent_bit: .k8s.container_name == "fluent-bit"
+        jaeger_agent: .k8s.container_name == "jaeger-agent"
+        kube_api_server: .k8s.container_name == "kube-apiserver"
+        kube_controller_manager: .k8s.container_name == "kube-controller-manager"
+        kubernetes_ingress_controller: .delivery_info.type == "haproxy" && .delivery_info.subtype
+          == "ingress"
+        kyverno: .k8s.namespace == "kyverno" && (.k8s.container_name == "cleanup"
+          || .k8s.container_name == "controller")
+        linkerd_proxy: .k8s.container_name == "linkerd-proxy"
+        nginx: .k8s.container_name == "nginx"
+        okko_components: .delivery_info.type == "component"
+        vault: .k8s.container_name == "vault-secrets-operator"
+        victoriametrics: .k8s.container_name == "victoria-metrics-operator" || .k8s.container_name
+          == "vmagent"
+      type: route
+    vault:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.vault
+      reroute_dropped: true
+      source: |-
+        .message.delivery_info.module = .logger
+        .message.delivery_info.type = "vault"
+        .message.dest_index = "k8s_vault_logs"
+        .message.env = .env
+        .message.k8s = .k8s
+        .message.log_level = .level
+        .message.message = .msg
+        .message.secret.full_name = .vaultsecret
+        .message.secret.name = ."Secret.Name"
+        .message.secret.namespace = ."Secret.Namespace"
+        .message.timestamp = floor(to_float!(.ts) * 1000)
+        .message.topic = "kubernetes.vault"
+        if (exists(.linkerd)) {
+          .message.linkerd = .linkerd
+        }
+        . = .message
+      type: remap
+    vector_logs_prepare:
+      inputs:
+      - vector_logs
+      source: |-
+        .datacenter = "{{ .Values.okkoDatacenter }}"
+        .delivery_info.subtype = "${VECTOR_SELF_POD_NAMESPACE:?empty vector self pod namespace variable}"
+        .delivery_info.type = "vector"
+        .dest_index = "vector"
+        .env = "{{ .Values.okkoEnv }}"
+        .hostname = "${VECTOR_SELF_NODE_NAME:?empty vector self node name variable}"
+        .k8s.cluster_name = "{{ .Values.okkoK8sClusterName }}"
+        .k8s.worker = "${VECTOR_SELF_NODE_NAME:?empty vector self node name variable}"
+        .process.pid = del(.pid)
+        .topic = "sysops_vector"
+        parsed_time = timestamp!(.timestamp)
+        .timestamp = to_unix_timestamp(parsed_time, "milliseconds")
+        .timehuman = format_timestamp!(parsed_time, "%FT%T%.3f%z")
+        del(.source_type)
+      type: remap
+    velero:
+      drop_on_error: true
+      inputs:
+      - message_not_json_routing.velero
+      reroute_dropped: true
+      source: |-
+        del(.metadata)
+        .delivery_info.type = "velero"
+        .dest_index = "k8s_velero_logs"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+        .topic = "kubernetes.velero"
+      type: remap
+    victoriametrics:
+      drop_on_error: true
+      inputs:
+      - unified_log_format_routing.victoriametrics
+      reroute_dropped: true
+      source: |-
+        .delivery_info.type = "victoriametrics"
+        .dest_index = "k8s_victoriametrics_logs"
+        .topic = "kubernetes.victoriametrics"
+        .timestamp = to_unix_timestamp(parse_timestamp!(.timestamp, "%+"), unit: "milliseconds")
+      type: remap
+dataDir: ""
+defaultVolumeMounts:
+- mountPath: /var/log/
+  name: var-log
+- mountPath: /var/lib
+  name: var-lib
+  readOnly: true
+- mountPath: /host/proc
+  name: procfs
+  readOnly: true
+- mountPath: /host/sys
+  name: sysfs
+  readOnly: true
+defaultVolumes:
+- hostPath:
+    path: /var/log/
+  name: var-log
+- hostPath:
+    path: /var/lib/
+  name: var-lib
+- hostPath:
+    path: /proc
+  name: procfs
+- hostPath:
+    path: /sys
+  name: sysfs
+dnsConfig: {}
+dnsPolicy: ClusterFirst
+env: []
+envFrom: []
+existingConfigMaps: []
+extraContainers: []
+extraObjects: []
+extraVolumeMounts: []
+extraVolumes: []
+fullnameOverride: ""
+haproxy:
+  affinity: {}
+  autoscaling:
+    customMetric: {}
+    enabled: false
+    external: false
+    maxReplicas: 10
+    minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: null
+  containerPorts: []
+  customConfig: ""
+  enabled: false
+  existingConfigMap: ""
+  extraContainers: []
+  extraVolumeMounts: []
+  extraVolumes: []
+  image:
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    repository: haproxytech/haproxy-alpine
+    tag: 2.6.12
+  initContainers: []
+  livenessProbe:
+    tcpSocket:
+      port: 1024
+  nodeSelector: {}
+  podAnnotations: {}
+  podLabels: {}
+  podPriorityClassName: ""
+  podSecurityContext: {}
+  readinessProbe:
+    tcpSocket:
+      port: 1024
+  replicas: 1
+  resources: {}
+  rollWorkload: true
+  securityContext: {}
+  service:
+    annotations: {}
+    externalTrafficPolicy: ""
+    ipFamilies: []
+    ipFamilyPolicy: ""
+    loadBalancerIP: ""
+    ports: []
+    topologyKeys: []
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automountToken: true
+    create: true
+    name: null
+  strategy: {}
+  terminationGracePeriodSeconds: 60
+  tolerations: []
+hostAliases: []
+image:
+  base: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+  repository: registry.playteam.ru/timberio/vector
+  sha: c5a507194f5caa41bd4f1937bb51071ef69c422c3cf23b6d4c2fcf875b702cc0
+  tag: 0.46.1-alpine
+ingress:
+  annotations: {}
+  className: ""
+  enabled: false
+  hosts: []
+  tls: []
+initContainers: []
+lifecycle: {}
+livenessProbe: {}
+logLevel: info
+metrics:
+  relabelConfigs:
+  - action: replace
+    replacement: vector
+    targetLabel: system
+minReadySeconds: 0
+nameOverride: ""
+nodeSelector: {}
+okkoDatacenter: default
+okkoEnv: default
+okkoK8sClusterName: default
+okkoKafkaLogs: default1:9042, default2:9042
+persistence:
+  accessModes:
+  - ReadWriteOnce
+  enabled: false
+  existingClaim: ""
+  finalizers:
+  - kubernetes.io/pvc-protection
+  hostPath:
+    enabled: true
+    path: /var/log/vectordata
+  retentionPolicy: {}
+  selectors: {}
+  size: 10Gi
+podAnnotations: {}
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: null
+  minAvailable: 1
+podHostNetwork: false
+podLabels:
+  vector.dev/exclude: "true"
+podManagementPolicy: OrderedReady
+podMonitor:
+  additionalLabels: {}
+  enabled: false
+  honorLabels: false
+  honorTimestamps: true
+  interval: null
+  jobLabel: app.kubernetes.io/name
+  metricRelabelings: []
+  path: /metrics
+  podTargetLabels: []
+  port: prom-exporter
+  relabelings: []
+  scrapeTimeout: null
+podPriorityClassName: ""
+podSecurityContext:
+  runAsUser: 0
+psp:
+  create: false
+rbac:
+  create: true
+readinessProbe: {}
+replicas: 1
+resources:
+  limits:
+    cpu: 2
+    memory: 2Gi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+role: Agent
+rollWorkload: true
+rollWorkloadExtraObjects: false
+rollWorkloadSecrets: false
+secrets:
+  generic: {}
+securityContext: {}
+service:
+  annotations: {}
+  enabled: true
+  externalTrafficPolicy: ""
+  internalTrafficPolicy: ""
+  ipFamilies: []
+  ipFamilyPolicy: ""
+  loadBalancerIP: ""
+  ports: []
+  topologyKeys: []
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  automountToken: true
+  create: true
+  name: null
+serviceHeadless:
+  enabled: true
+shareProcessNamespace: false
+terminationGracePeriodSeconds: 60
+tolerations:
+- effect: NoSchedule
+  key: node-role.kubernetes.io/infr
+  operator: Exists
+- effect: NoSchedule
+  key: node-role.kubernetes.io/control-plane
+  operator: Exists
+- effect: NoSchedule
+  key: node-role.kubernetes.io/screenapi
+  value: ""
+topologySpreadConstraints: []
+updateStrategy: {}
+workloadResourceAnnotations: {}
