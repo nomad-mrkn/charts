@@ -108,7 +108,7 @@ podLabels: {}
 podSecurityContext: {}
 priorityClassName: ""
 rbac:
-  clusterAdministrator: true
+  clusterAdministrator: false
   clusterAdministratorName: cluster-admin
   create: true
 resources:
