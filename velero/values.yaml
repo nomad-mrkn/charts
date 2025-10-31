@@ -155,7 +155,7 @@ tolerations:
 - effect: NoSchedule
   key: node-role.kubernetes.io/infr
   operator: Exists
-upgradeCRDs: false
+upgradeCRDs: true
 vault:
 - name: velero-cloud-secret
   path: secret/internal/devops/velero
