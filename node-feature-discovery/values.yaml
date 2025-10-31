@@ -30,7 +30,7 @@ gc:
   tolerations: []
 image:
   pullPolicy: IfNotPresent
-  repository: registry.playteam.ru/kubernetes/node-feature-discovery
+  repository: k8s.gcr.io/nfd/node-feature-discovery
 imagePullSecrets: []
 master:
   affinity:
@@ -230,5 +230,5 @@ workercpumodel:
   defaultCpuTiers: tier1
   enable: true
   image:
-    repository: registry.playteam.ru/alpine
+    repository: docker.io/alpine
     tag: 3.17

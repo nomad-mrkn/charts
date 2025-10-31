@@ -117,7 +117,7 @@ crds:
 
     image:
       # -- (string) Image registry
-      registry: registry.playteam.ru
+      registry: ghcr.io
       # -- (string) Image repository
       repository: kyverno/kyverno-cli
       # -- (string) Image tag
@@ -473,9 +473,9 @@ webhooksCleanup:
 
   image:
     # -- (string) Image registry
-    registry: registry.playteam.ru
+    registry: docker.io
     # -- Image repository
-    repository: kubectl
+    repository: bitnami/kubectl
     # -- Image tag
     # Defaults to `latest` if omitted
     tag: '1.26.4'
@@ -530,9 +530,9 @@ policyReportsCleanup:
 
   image:
     # -- (string) Image registry
-    registry: registry.playteam.ru
+    registry: docker.io
     # -- Image repository
-    repository: kubectl
+    repository: bitnami/kubectl
     # -- Image tag
     # Defaults to `latest` if omitted
     tag: '1.26.4'
@@ -708,9 +708,9 @@ cleanupJobs:
 
     image:
       # -- (string) Image registry
-      registry: registry.playteam.ru
+      registry: docker.io
       # -- Image repository
-      repository: kubectl
+      repository: bitnami/kubectl
       # -- Image tag
       # Defaults to `latest` if omitted
       tag: '1.26.4'
@@ -785,9 +785,9 @@ cleanupJobs:
 
     image:
       # -- (string) Image registry
-      registry: registry.playteam.ru
+      registry: docker.io
       # -- Image repository
-      repository: kubectl
+      repository: bitnami/kubectl
       # -- Image tag
       # Defaults to `latest` if omitted
       tag: '1.26.4'
@@ -865,9 +865,9 @@ cleanupJobs:
 
     image:
       # -- (string) Image registry
-      registry: registry.playteam.ru
+      registry: docker.io
       # -- Image repository
-      repository: kubectl
+      repository: bitnami/kubectl
       # -- Image tag
       # Defaults to `latest` if omitted
       tag: '1.26.4'
@@ -945,9 +945,9 @@ cleanupJobs:
 
     image:
       # -- (string) Image registry
-      registry: registry.playteam.ru
+      registry: docker.io
       # -- Image repository
-      repository: kubectl
+      repository: bitnami/kubectl
       # -- Image tag
       # Defaults to `latest` if omitted
       tag: '1.26.4'
@@ -1025,9 +1025,9 @@ cleanupJobs:
 
     image:
       # -- (string) Image registry
-      registry: registry.playteam.ru
+      registry: docker.io
       # -- Image repository
-      repository: kubectl
+      repository: bitnami/kubectl
       # -- Image tag
       # Defaults to `latest` if omitted
       tag: '1.26.4'
@@ -1320,7 +1320,7 @@ admissionController:
 
     image:
       # -- Image registry
-      registry: registry.playteam.ru
+      registry: ghcr.io
       # -- Image repository
       repository: kyverno/kyvernopre
       # -- (string) Image tag
@@ -1366,9 +1366,9 @@ admissionController:
 
     image:
       # -- Image registry
-      registry: registry.playteam.ru
+      registry: ghcr.io
       # -- Image repository
-      repository: kyverno
+      repository: kyverno/kyverno
       # -- (string) Image tag
       # Defaults to appVersion in Chart.yaml if omitted
       tag: v1.12.5
@@ -1586,7 +1586,7 @@ backgroundController:
 
   image:
     # -- Image registry
-    registry: registry.playteam.ru
+    registry: ghcr.io
     # -- Image repository
     repository: kyverno/background-controller
     # -- Image tag
@@ -1841,7 +1841,7 @@ cleanupController:
 
   image:
     # -- Image registry
-    registry: registry.playteam.ru
+    registry: ghcr.io
     # -- Image repository
     repository: kyverno/cleanup-controller
     # -- (string) Image tag
@@ -2153,7 +2153,7 @@ reportsController:
 
   image:
     # -- Image registry
-    registry: registry.playteam.ru
+    registry: ghcr.io
     # -- Image repository
     repository: kyverno/reports-controller
     # -- (string) Image tag

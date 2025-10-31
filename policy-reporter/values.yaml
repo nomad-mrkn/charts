@@ -2,7 +2,7 @@
 nameOverride: ""
 
 image:
-  registry: registry.playteam.ru
+  registry: ghcr.io
   repository: kyverno/policy-reporter
   pullPolicy: IfNotPresent
   tag: 2.24.1
