@@ -64,10 +64,10 @@ hostAliases:
 image:
   imagePullSecrets: []
   pullPolicy: IfNotPresent
-  repository: registry.playteam.ru/velero
-  tag: v1.9.2-765
+  repository: docker.io/velero/velero
+  tag: v1.12.3
 initContainers:
-- image: registry.playteam.ru/velero/aws:v1.3.0-765
+- image: docker.io/velero/velero-plugin-for-aws:v1.8.2
   imagePullPolicy: IfNotPresent
   name: velero-plugin-for-aws
   volumeMounts:
@@ -77,7 +77,7 @@ kubectl:
   annotations: {}
   containerSecurityContext: {}
   image:
-    repository: registry.playteam.ru/kubectl
+    repository: docker.io/bitnami/kubectl
     tag: 1.26.4
   labels: {}
   resources: {}
