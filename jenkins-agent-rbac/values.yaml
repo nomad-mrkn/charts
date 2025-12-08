@@ -1,0 +1,269 @@
+namespace: jenkins-agent
+rbac:
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - services
+    - namespaces
+    - endpoints
+    - pods
+    - pods/exec
+    - pods/status
+    - pods/log
+    - configmaps
+    - serviceaccounts
+    - replicationcontrollers
+    - podtemplates
+    - events
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - secrets
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - batch
+    resources:
+    - jobs
+    - cronjobs
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - audit.k8s.io
+    resources:
+    - events
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - nodes
+    - nodes/proxy
+    - persistentvolumes
+    - persistentvolumeclaims
+    - limitranges
+    - resourcequotas
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - apps
+    resources:
+    - deployments
+    - statefulsets
+    - daemonsets
+    - replicasets
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - rbac.authorization.k8s.io
+    resources:
+    - roles
+    - clusterroles
+    - rolebindings
+    - clusterrolebindings
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - watch
+    - update
+  - apiGroups:
+    - networking.k8s.io
+    resources:
+    - ingresses
+    - networkpolicies
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - apiextensions.k8s.io
+    resources:
+    - customresourcedefinitions
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - watch
+    - update
+    - delete
+  - apiGroups:
+    - autoscaling
+    resources:
+    - horizontalpodautoscalers
+    - verticalpodautoscalers
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - autoscaling.k8s.io
+    resources:
+    - horizontalpodautoscalers
+    - verticalpodautoscalers
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - create
+    - get
+    - update
+  - apiGroups:
+    - ricoberger.de
+    resources:
+    - vaultsecrets
+    - cassandra-vault-secrets
+    verbs:
+    - create
+    - get
+    - list
+    - watch
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - operator.victoriametrics.com
+    resources:
+    - vmservicescrapes
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - watch
+    - update
+    - delete
+  - apiGroups:
+    - keda.sh
+    resources:
+    - scaledobjects
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - watch
+    - update
+    - delete
+  - apiGroups:
+    - monitoring.coreos.com
+    resources:
+    - servicemonitors
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - watch
+    - update
+    - delete
+  - apiGroups:
+    - apps.openshift.io
+    resources:
+    - deploymentconfigs
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - aquasecurity.github.io
+    resources:
+    - clustercompliancedetailreports
+    - clustercompliancereports
+    - clusterconfigauditreports
+    - clusterinfraassessmentreports
+    - clusterrbacassessmentreports
+    - clustersbomreports
+    - clustervulnerabilityreports
+    - configauditreports
+    - exposedsecretreports
+    - infraassessmentreports
+    - rbacassessmentreports
+    - sbomreports
+    - vulnerabilityreports
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - watch
+    - update
+    - delete
+  - apiGroups:
+    - aquasecurity.github.io
+    resources:
+    - clustercompliancereports/status
+    verbs:
+    - get
+    - patch
+    - update
+  - apiGroups:
+    - policy.linkerd.io
+    resources:
+    - httproutes
+    verbs:
+    - create
+    - get
+    - update
+  - apiGroups:
+    - wgpolicyk8s.io
+    resources:
+    - clusterpolicyreports
+    - policyreports
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+username: jenkins-agent

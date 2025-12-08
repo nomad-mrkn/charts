@@ -1,0 +1,199 @@
+clusterDomain: cluster.local
+commonLabels: {}
+createNamespaceMetadataJob: true
+dashboard:
+  GID: null
+  UID: null
+  enforcedHostRegexp: ""
+  image:
+    name: web
+    pullPolicy: ""
+    registry: ""
+    tag: ""
+  logFormat: ""
+  logLevel: ""
+  proxy: null
+  replicas: 1
+  resources:
+    cpu:
+      limit: null
+      request: null
+    ephemeral-storage:
+      limit: ""
+      request: ""
+    memory:
+      limit: null
+      request: null
+  restrictPrivileges: false
+  service:
+    annotations: {}
+    labels: {}
+defaultGID: 2103
+defaultImagePullPolicy: IfNotPresent
+defaultLogFormat: plain
+defaultLogLevel: info
+defaultRegistry: cr.l5d.io/linkerd
+defaultUID: 2103
+enablePSP: false
+enablePodAntiAffinity: false
+enablePodDisruptionBudget: false
+grafana:
+  externalUrl: null
+  uidPrefix: null
+  url: null
+identityTrustDomain: ""
+imagePullSecrets: []
+jaegerUrl: ""
+linkerdNamespace: linkerd
+linkerdVersion: edge-25.1.2
+metricsAPI:
+  GID: null
+  UID: null
+  image:
+    name: metrics-api
+    pullPolicy: ""
+    registry: ""
+    tag: ""
+  logFormat: ""
+  logLevel: ""
+  nodeSelector:
+    kubernetes.io/os: linux
+  proxy: null
+  replicas: 1
+  resources:
+    cpu:
+      limit: null
+      request: null
+    ephemeral-storage:
+      limit: ""
+      request: ""
+    memory:
+      limit: null
+      request: null
+  service:
+    annotations: {}
+  tolerations: null
+namespaceMetadata:
+  image:
+    name: extension-init
+    pullPolicy: ""
+    registry: ""
+    tag: v0.1.2
+  nodeSelector:
+    kubernetes.io/os: linux
+  tolerations: null
+nodeSelector:
+  kubernetes.io/os: linux
+podLabels: {}
+prometheus:
+  alertRelabelConfigs: null
+  alertmanagers: null
+  args:
+    config.file: /etc/prometheus/prometheus.yml
+    storage.tsdb.path: /data
+    storage.tsdb.retention.time: 10m
+  enabled: true
+  globalConfig:
+    evaluation_interval: 10s
+    scrape_interval: 10s
+    scrape_timeout: 10s
+  image:
+    name: prometheus
+    pullPolicy: ""
+    registry: quay.io/prometheus
+    tag: v2.48.0
+  logFormat: ""
+  logLevel: ""
+  metricRelabelConfigs: null
+  nodeSelector:
+    kubernetes.io/os: linux
+  podAnnotations: {}
+  proxy: null
+  remoteWrite: null
+  resources:
+    cpu:
+      limit: null
+      request: null
+    ephemeral-storage:
+      limit: 5Gi
+      request: 1Gi
+    memory:
+      limit: null
+      request: null
+  ruleConfigMapMounts: null
+  scrapeConfigs: null
+  sidecarContainers: null
+  tolerations: null
+prometheusCredsSecret: ""
+prometheusUrl: ""
+revisionHistoryLimit: 10
+tap:
+  GID: null
+  UID: null
+  caBundle: ""
+  crtPEM: ""
+  externalSecret: false
+  ignoreHeaders: []
+  image:
+    name: tap
+    pullPolicy: ""
+    registry: ""
+    tag: ""
+  injectCaFrom: ""
+  injectCaFromSecret: ""
+  keyPEM: ""
+  logFormat: ""
+  logLevel: ""
+  proxy: null
+  replicas: 1
+  resources:
+    cpu:
+      limit: null
+      request: null
+    ephemeral-storage:
+      limit: ""
+      request: ""
+    memory:
+      limit: null
+      request: null
+  service:
+    annotations: {}
+tapInjector:
+  GID: null
+  UID: null
+  caBundle: ""
+  crtPEM: ""
+  externalSecret: false
+  failurePolicy: Ignore
+  image:
+    name: tap
+    pullPolicy: ""
+    registry: ""
+    tag: ""
+  injectCaFrom: ""
+  injectCaFromSecret: ""
+  keyPEM: ""
+  logFormat: ""
+  logLevel: ""
+  namespaceSelector:
+    matchExpressions:
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - kube-system
+  objectSelector: null
+  proxy: null
+  replicas: 1
+  resources:
+    cpu:
+      limit: null
+      request: null
+    ephemeral-storage:
+      limit: ""
+      request: ""
+    memory:
+      limit: null
+      request: null
+  service:
+    annotations: {}
+tolerations: null

@@ -1,0 +1,86 @@
+affinity: {}
+app:
+  leaderElection:
+    leaseDuration: 15s
+    renewDeadline: 10s
+  logFormat: text
+  logLevel: 1
+  metrics:
+    port: 9402
+    service:
+      enabled: true
+      ipFamilies: []
+      ipFamilyPolicy: ""
+      servicemonitor:
+        enabled: false
+        interval: 10s
+        labels: {}
+        prometheusInstance: default
+        scrapeTimeout: 5s
+      type: ClusterIP
+  podAnnotations: {}
+  podLabels: {}
+  readinessProbe:
+    path: /readyz
+    port: 6060
+  securityContext:
+    seccompProfileEnabled: true
+  trust:
+    namespace: linkerd
+  webhook:
+    host: 0.0.0.0
+    hostNetwork: false
+    port: 6443
+    service:
+      ipFamilies: []
+      ipFamilyPolicy: ""
+      type: ClusterIP
+    timeoutSeconds: 5
+    tls:
+      approverPolicy:
+        certManagerNamespace: cert-manager
+        certManagerServiceAccount: cert-manager
+        enabled: false
+      certificate:
+        secretTemplate: {}
+      helmCert:
+        enabled: false
+automountServiceAccountToken: true
+commonLabels: {}
+crds:
+  enabled: true
+  keep: true
+defaultPackage:
+  enabled: true
+  resources: {}
+defaultPackageImage:
+  pullPolicy: IfNotPresent
+  repository: quay.io/jetstack/trust-pkg-debian-bookworm
+  tag: "20230311.0"
+filterExpiredCertificates:
+  enabled: false
+image:
+  pullPolicy: IfNotPresent
+  repository: quay.io/jetstack/trust-manager
+  tag: v0.16.0
+imagePullSecrets: []
+nameOverride: ""
+namespace: ""
+nodeSelector:
+  kubernetes.io/os: linux
+podDisruptionBudget:
+  enabled: false
+priorityClassName: ""
+replicaCount: 1
+resources: {}
+secretTargets:
+  authorizedSecrets: []
+  authorizedSecretsAll: false
+  enabled: false
+serviceAccount:
+  automountServiceAccountToken: true
+  create: true
+tolerations: []
+topologySpreadConstraints: []
+volumeMounts: []
+volumes: []

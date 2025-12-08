@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: talos-vmtoolsd
+  name: talos-vmtoolsd
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: talos-vmtoolsd
+  template:
+    metadata:
+      labels:
+        app: talos-vmtoolsd
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          name: talos-vmtoolsd
+          volumeMounts:
+            - name: config
+              mountPath: /etc/talos-vmtoolsd
+              readOnly: true
+          env:
+            - name: GRPC_ENFORCE_ALPN_ENABLED
+              value: "false"
+            - name: VMTOOLSD_TALOS_CONFIG
+              value: /etc/talos-vmtoolsd/talosconfig
+            - name: VMTOOLSD_TALOS_NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsUser: 1002
+            runAsGroup: 1002
+      serviceAccountName: talos-vmtoolsd
+      serviceAccount: talos-vmtoolsd
+      securityContext:
+        fsGroup: 1002
+      volumes:
+        - name: config
+          secret:
+            secretName: talos-vmtoolsd-config
+            defaultMode: 0400

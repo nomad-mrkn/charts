@@ -1,0 +1,7 @@
+apiVersion: v2
+appVersion: 1.0.0
+description: Jenkins Agent RBAC manifests.
+kubeVersion: '>=1.16.0-0'
+name: jenkins-agent-rbac
+type: application
+version: 1.0.0-162R

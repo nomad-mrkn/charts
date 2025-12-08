@@ -1,0 +1,7 @@
+apiVersion: v1
+appVersion: 0.6.1
+description: The tool for scraping container metrics.
+kubeVersion: '>=1.26.0-0'
+name: talos-vmtoolsd
+type: application
+version: 0.6.1-okko-v2

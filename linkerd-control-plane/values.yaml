@@ -1,0 +1,277 @@
+clusterDomain: cluster.local
+clusterName: {}
+clusterNetworks: 10.0.0.0/8,100.64.0.0/10,172.16.0.0/12,192.168.0.0/16,fd00::/8
+cniEnabled: false
+commonLabels: {}
+controlPlaneTracing: false
+controlPlaneTracingNamespace: linkerd-jaeger
+controller:
+  podDisruptionBudget:
+    maxUnavailable: 1
+controllerGID: -1
+controllerImage: cr.l5d.io/linkerd/controller
+controllerImageVersion: ""
+controllerLogFormat: plain
+controllerLogLevel: info
+controllerReplicas: 1
+controllerUID: 2103
+debugContainer:
+  image:
+    name: cr.l5d.io/linkerd/debug
+    pullPolicy: ""
+    version: ""
+deploymentStrategy:
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+destinationController:
+  livenessProbe:
+    timeoutSeconds: 1
+  meshedHttp2ClientProtobuf:
+    keep_alive:
+      interval:
+        seconds: 10
+      timeout:
+        seconds: 3
+      while_idle: true
+  podAnnotations: {}
+  readinessProbe:
+    timeoutSeconds: 1
+disableHeartBeat: true
+disableIPv6: true
+egress:
+  globalEgressNetworkNamespace: linkerd-egress
+enableEndpointSlices: true
+enableH2Upgrade: true
+enablePSP: false
+enablePodAntiAffinity: false
+enablePodDisruptionBudget: false
+enablePprof: false
+identity:
+  externalCA: true
+  issuer:
+    clockSkewAllowance: 20s
+    issuanceLifetime: 24h0m0s
+    scheme: kubernetes.io/tls
+    tls:
+      crtPEM: ""
+      keyPEM: ""
+  kubeAPI:
+    clientBurst: 200
+    clientQPS: 100
+  livenessProbe:
+    timeoutSeconds: 1
+  podAnnotations: {}
+  readinessProbe:
+    timeoutSeconds: 1
+  serviceAccountTokenProjection: true
+identityTrustAnchorsPEM: ""
+identityTrustDomain: ""
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+kubeAPI:
+  clientBurst: 200
+  clientQPS: 100
+linkerdVersion: edge-25.1.2
+networkValidator:
+  connectAddr: ""
+  enableSecurityContext: true
+  listenAddr: ""
+  logFormat: plain
+  logLevel: debug
+  timeout: 10s
+nodeSelector:
+  kubernetes.io/os: linux
+podAnnotations: {}
+podLabels: {}
+podMonitor:
+  controller:
+    enabled: true
+    namespaceSelector: |
+      matchNames:
+        - {{ .Release.Namespace }}
+        - linkerd-viz
+        - linkerd-jaeger
+  enabled: false
+  labels: {}
+  proxy:
+    enabled: true
+  scrapeInterval: 10s
+  scrapeTimeout: 10s
+  serviceMirror:
+    enabled: true
+policyController:
+  image:
+    name: cr.l5d.io/linkerd/policy-controller
+    pullPolicy: ""
+    version: ""
+  livenessProbe:
+    timeoutSeconds: 1
+  logLevel: info
+  probeNetworks:
+  - 0.0.0.0/0
+  - ::/0
+  readinessProbe:
+    timeoutSeconds: 1
+  resources:
+    cpu:
+      limit: ""
+      request: ""
+    ephemeral-storage:
+      limit: ""
+      request: ""
+    memory:
+      limit: ""
+      request: ""
+policyValidator:
+  caBundle: ""
+  crtPEM: ""
+  externalSecret: false
+  injectCaFrom: ""
+  injectCaFromSecret: ""
+  keyPEM: ""
+  namespaceSelector:
+    matchExpressions:
+    - key: config.linkerd.io/admission-webhooks
+      operator: NotIn
+      values:
+      - disabled
+priorityClassName: ""
+profileValidator:
+  caBundle: ""
+  crtPEM: ""
+  externalSecret: false
+  injectCaFrom: ""
+  injectCaFromSecret: ""
+  keyPEM: ""
+  namespaceSelector:
+    matchExpressions:
+    - key: config.linkerd.io/admission-webhooks
+      operator: NotIn
+      values:
+      - disabled
+prometheusUrl: ""
+proxy:
+  await: true
+  control:
+    streams:
+      idleTimeout: 5m
+      initialTimeout: 3s
+      lifetime: 1h
+  cores: 4
+  defaultInboundPolicy: all-unauthenticated
+  disableInboundProtocolDetectTimeout: false
+  disableOutboundProtocolDetectTimeout: false
+  enableExternalProfiles: false
+  enableShutdownEndpoint: false
+  gid: -1
+  image:
+    name: cr.l5d.io/linkerd/proxy
+    pullPolicy: ""
+    version: ""
+  inbound:
+    server:
+      http2:
+        keepAliveInterval: 10s
+        keepAliveTimeout: 3s
+  inboundConnectTimeout: 100ms
+  inboundDiscoveryCacheUnusedTimeout: 90s
+  livenessProbe:
+    initialDelaySeconds: 10
+    timeoutSeconds: 1
+  logFormat: json
+  logHTTPHeaders: insecure
+  logLevel: error,linkerd=info,hickory=error
+  nativeSidecar: false
+  opaquePorts: 25,587,3306,4444,5432,6379,9300,11211
+  outbound:
+    server:
+      http2:
+        keepAliveInterval: 10s
+        keepAliveTimeout: 3s
+  outboundConnectTimeout: 1000ms
+  outboundDiscoveryCacheUnusedTimeout: 5s
+  ports:
+    admin: 4191
+    control: 4190
+    inbound: 4143
+    outbound: 4140
+  readinessProbe:
+    initialDelaySeconds: 2
+    timeoutSeconds: 1
+  requireIdentityOnInboundPorts: ""
+  resources:
+    cpu:
+      limit: "4"
+      request: "1"
+    ephemeral-storage:
+      limit: ""
+      request: ""
+    memory:
+      limit: 2Gi
+      request: 512Mi
+  shutdownGracePeriod: ""
+  startupProbe:
+    failureThreshold: 120
+    initialDelaySeconds: 0
+    periodSeconds: 1
+  uid: 2102
+  waitBeforeExitSeconds: 0
+proxyInit:
+  closeWaitTimeoutSecs: 0
+  ignoreInboundPorts: 4567,4568
+  ignoreOutboundPorts: 4567,4568
+  image:
+    name: cr.l5d.io/linkerd/proxy-init
+    pullPolicy: ""
+    version: v2.4.2
+  iptablesMode: legacy
+  kubeAPIServerPorts: 443,6443
+  logFormat: ""
+  logLevel: ""
+  privileged: false
+  runAsGroup: 65534
+  runAsRoot: false
+  runAsUser: 65534
+  skipSubnets: ""
+  xtMountPath:
+    mountPath: /run
+    name: linkerd-proxy-init-xtables-lock
+proxyInjector:
+  caBundle: ""
+  crtPEM: ""
+  externalSecret: false
+  injectCaFrom: ""
+  injectCaFromSecret: ""
+  keyPEM: ""
+  livenessProbe:
+    timeoutSeconds: 1
+  namespaceSelector:
+    matchExpressions:
+    - key: config.linkerd.io/admission-webhooks
+      operator: NotIn
+      values:
+      - disabled
+    - key: kubernetes.io/metadata.name
+      operator: NotIn
+      values:
+      - cert-manager
+  objectSelector:
+    matchExpressions:
+    - key: linkerd.io/control-plane-component
+      operator: DoesNotExist
+    - key: linkerd.io/cni-resource
+      operator: DoesNotExist
+  podAnnotations: {}
+  readinessProbe:
+    timeoutSeconds: 1
+  timeoutSeconds: 10
+revisionHistoryLimit: 10
+runtimeClassName: ""
+spValidator:
+  livenessProbe:
+    timeoutSeconds: 1
+  readinessProbe:
+    timeoutSeconds: 1
+tokenSecretName: {}
+webhookFailurePolicy: Ignore

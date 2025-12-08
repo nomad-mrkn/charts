@@ -1,0 +1,6 @@
+dependencies:
+- name: partials
+  repository: file://../../linkerd-partials/0.1.0/
+  version: 0.1.0
+digest: sha256:88b1c12db9da0a313718b93583fc463d1f5256199ddbcd8246e91daa3e48a27d
+generated: "2025-11-13T21:26:53.578107+03:00"
