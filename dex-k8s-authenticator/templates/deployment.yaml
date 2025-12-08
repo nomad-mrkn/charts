@@ -39,33 +39,74 @@ spec:
         - name: http
           containerPort: {{ default "5555" .Values.dexK8sAuthenticator.port }}
           protocol: TCP
-        {{- if and .Values.livenessProbe (not .Values.livenessProbe.disabled) }}
-        livenessProbe:
-          {{- if .Values.livenessProbe.tcpSocket }}
-          tcpSocket:
-            port: http
+        {{- if .Values.livenessProbe }}
+          {{- if .Values.livenessProbe.disabled }}
+          {{- else if .Values.livenessProbe.exec }}
+          livenessProbe:
+            exec:
+              command:
+                {{- range .Values.livenessProbe.exec.command }}
+                - {{ . }}
+                {{- end }}
+            {{- $probe := .Values.livenessProbe }}
+            {{- if $probe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $probe.periodSeconds }}
+            periodSeconds: {{ $probe.periodSeconds }}
+            {{- end }}
+            {{- if $probe.timeoutSeconds }}
+            timeoutSeconds: {{ $probe.timeoutSeconds }}
+            {{- end }}
+            {{- if $probe.successThreshold }}
+            successThreshold: {{ $probe.successThreshold }}
+            {{- end }}
+            {{- if $probe.failureThreshold }}
+            failureThreshold: {{ $probe.failureThreshold }}
+            {{- end }}
+          {{- else if .Values.livenessProbe.tcpSocket }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            {{- $probe := .Values.livenessProbe }}
+            {{- if $probe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $probe.periodSeconds }}
+            periodSeconds: {{ $probe.periodSeconds }}
+            {{- end }}
+            {{- if $probe.timeoutSeconds }}
+            timeoutSeconds: {{ $probe.timeoutSeconds }}
+            {{- end }}
+            {{- if $probe.successThreshold }}
+            successThreshold: {{ $probe.successThreshold }}
+            {{- end }}
+            {{- if $probe.failureThreshold }}
+            failureThreshold: {{ $probe.failureThreshold }}
+            {{- end }}
           {{- else }}
-          httpGet:
-            path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
-            port: http
+          livenessProbe:
+            httpGet:
+              path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
+              port: http
+            {{- $probe := .Values.livenessProbe }}
+            {{- if $probe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $probe.periodSeconds }}
+            periodSeconds: {{ $probe.periodSeconds }}
+            {{- end }}
+            {{- if $probe.timeoutSeconds }}
+            timeoutSeconds: {{ $probe.timeoutSeconds }}
+            {{- end }}
+            {{- if $probe.successThreshold }}
+            successThreshold: {{ $probe.successThreshold }}
+            {{- end }}
+            {{- if $probe.failureThreshold }}
+            failureThreshold: {{ $probe.failureThreshold }}
+            {{- end }}
           {{- end }}
-          {{- $probe := .Values.livenessProbe }}
-          {{- if $probe.initialDelaySeconds }}
-          initialDelaySeconds: {{ $probe.initialDelaySeconds }}
-          {{- end }}
-          {{- if $probe.periodSeconds }}
-          periodSeconds: {{ $probe.periodSeconds }}
-          {{- end }}
-          {{- if $probe.timeoutSeconds }}
-          timeoutSeconds: {{ $probe.timeoutSeconds }}
-          {{- end }}
-          {{- if $probe.successThreshold }}
-          successThreshold: {{ $probe.successThreshold }}
-          {{- end }}
-          {{- if $probe.failureThreshold }}
-          failureThreshold: {{ $probe.failureThreshold }}
-          {{- end }}
-        {{- else if not (and .Values.livenessProbe .Values.livenessProbe.disabled) }}
+        {{- else }}
         livenessProbe:
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
