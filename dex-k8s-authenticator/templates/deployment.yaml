@@ -46,13 +46,23 @@ spec:
           {{- if .Values.livenessProbe }}
           {{- toYaml .Values.livenessProbe | nindent 10 }}
           {{- end }}
+        {{- if .Values.readinessProbe }}
+        readinessProbe:
+          {{- if .Values.readinessProbe.tcpSocket }}
+          tcpSocket:
+            port: http
+          {{- else }}
+          httpGet:
+            path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
+            port: http
+          {{- end }}
+          {{- toYaml .Values.readinessProbe | nindent 10 }}
+        {{- else }}
         readinessProbe:
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
-          {{- if .Values.readinessProbe }}
-          {{- toYaml .Values.readinessProbe | nindent 10 }}
-          {{- end }}
+        {{- end }}
         env:
           {{- with .Values.podEnv }}
           {{- toYaml . | nindent 12 }}
