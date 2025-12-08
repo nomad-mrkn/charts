@@ -39,7 +39,7 @@ spec:
         - name: http
           containerPort: {{ default "5555" .Values.dexK8sAuthenticator.port }}
           protocol: TCP
-        {{- if .Values.livenessProbe }}
+        {{- if and .Values.livenessProbe (not .Values.livenessProbe.disabled) }}
         livenessProbe:
           {{- if .Values.livenessProbe.tcpSocket }}
           tcpSocket:
@@ -65,7 +65,7 @@ spec:
           {{- if $probe.failureThreshold }}
           failureThreshold: {{ $probe.failureThreshold }}
           {{- end }}
-        {{- else }}
+        {{- else if not (and .Values.livenessProbe .Values.livenessProbe.disabled) }}
         livenessProbe:
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
