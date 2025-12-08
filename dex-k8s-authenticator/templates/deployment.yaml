@@ -49,7 +49,22 @@ spec:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
           {{- end }}
-          {{- toYaml .Values.livenessProbe | nindent 10 }}
+          {{- $probe := .Values.livenessProbe }}
+          {{- if $probe.initialDelaySeconds }}
+          initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+          {{- end }}
+          {{- if $probe.periodSeconds }}
+          periodSeconds: {{ $probe.periodSeconds }}
+          {{- end }}
+          {{- if $probe.timeoutSeconds }}
+          timeoutSeconds: {{ $probe.timeoutSeconds }}
+          {{- end }}
+          {{- if $probe.successThreshold }}
+          successThreshold: {{ $probe.successThreshold }}
+          {{- end }}
+          {{- if $probe.failureThreshold }}
+          failureThreshold: {{ $probe.failureThreshold }}
+          {{- end }}
         {{- else }}
         livenessProbe:
           httpGet:
@@ -66,7 +81,22 @@ spec:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
           {{- end }}
-          {{- toYaml .Values.readinessProbe | nindent 10 }}
+          {{- $probe := .Values.readinessProbe }}
+          {{- if $probe.initialDelaySeconds }}
+          initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+          {{- end }}
+          {{- if $probe.periodSeconds }}
+          periodSeconds: {{ $probe.periodSeconds }}
+          {{- end }}
+          {{- if $probe.timeoutSeconds }}
+          timeoutSeconds: {{ $probe.timeoutSeconds }}
+          {{- end }}
+          {{- if $probe.successThreshold }}
+          successThreshold: {{ $probe.successThreshold }}
+          {{- end }}
+          {{- if $probe.failureThreshold }}
+          failureThreshold: {{ $probe.failureThreshold }}
+          {{- end }}
         {{- else }}
         readinessProbe:
           httpGet:
