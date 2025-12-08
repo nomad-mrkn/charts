@@ -39,13 +39,23 @@ spec:
         - name: http
           containerPort: {{ default "5555" .Values.dexK8sAuthenticator.port }}
           protocol: TCP
+        {{- if .Values.livenessProbe }}
+        livenessProbe:
+          {{- if .Values.livenessProbe.tcpSocket }}
+          tcpSocket:
+            port: http
+          {{- else }}
+          httpGet:
+            path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
+            port: http
+          {{- end }}
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
+        {{- else }}
         livenessProbe:
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
-          {{- if .Values.livenessProbe }}
-          {{- toYaml .Values.livenessProbe | nindent 10 }}
-          {{- end }}
+        {{- end }}
         {{- if .Values.readinessProbe }}
         readinessProbe:
           {{- if .Values.readinessProbe.tcpSocket }}
