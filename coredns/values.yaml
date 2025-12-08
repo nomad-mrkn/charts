@@ -1,5 +1,5 @@
 image:
-  repository: registry.k8s.io/coredns/coredns
+  repository: coredns/coredns
   tag: 1.12.1
   pullPolicy: IfNotPresent
 
