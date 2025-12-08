@@ -39,33 +39,20 @@ spec:
         - name: http
           containerPort: {{ default "5555" .Values.dexK8sAuthenticator.port }}
           protocol: TCP
-        {{- if .Values.healthCheckPath }}
         livenessProbe:
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
-          initialDelaySeconds: 60
-          periodSeconds: 30
-          timeoutSeconds: 10
-          failureThreshold: 3
+          {{- if .Values.livenessProbe }}
+          {{- toYaml .Values.livenessProbe | nindent 10 }}
+          {{- end }}
         readinessProbe:
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        {{- else }}
-        livenessProbe:
-          httpGet:
-            path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
-            port: http
-        readinessProbe:
-          httpGet:
-            path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
-            port: http
-        {{- end }}
+          {{- if .Values.readinessProbe }}
+          {{- toYaml .Values.readinessProbe | nindent 10 }}
+          {{- end }}
         env:
           {{- with .Values.podEnv }}
           {{- toYaml . | nindent 12 }}
