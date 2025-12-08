@@ -14,4 +14,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: coredns
-    namespace: kube-system
+    namespace: {{ .Release.Namespace }}

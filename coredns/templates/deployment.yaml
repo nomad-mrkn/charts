@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: coredns
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
   labels:
     k8s-app: kube-dns
     kubernetes.io/name: "CoreDNS"
