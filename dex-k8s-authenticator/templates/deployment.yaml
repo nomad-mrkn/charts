@@ -113,30 +113,71 @@ spec:
             port: http
         {{- end }}
         {{- if .Values.readinessProbe }}
-        readinessProbe:
-          {{- if .Values.readinessProbe.tcpSocket }}
-          tcpSocket:
-            port: http
+          {{- if .Values.readinessProbe.disabled }}
+          {{- else if .Values.readinessProbe.exec }}
+          readinessProbe:
+            exec:
+              command:
+                {{- range .Values.readinessProbe.exec.command }}
+                - {{ . }}
+                {{- end }}
+            {{- $probe := .Values.readinessProbe }}
+            {{- if $probe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $probe.periodSeconds }}
+            periodSeconds: {{ $probe.periodSeconds }}
+            {{- end }}
+            {{- if $probe.timeoutSeconds }}
+            timeoutSeconds: {{ $probe.timeoutSeconds }}
+            {{- end }}
+            {{- if $probe.successThreshold }}
+            successThreshold: {{ $probe.successThreshold }}
+            {{- end }}
+            {{- if $probe.failureThreshold }}
+            failureThreshold: {{ $probe.failureThreshold }}
+            {{- end }}
+          {{- else if .Values.readinessProbe.tcpSocket }}
+          readinessProbe:
+            tcpSocket:
+              port: http
+            {{- $probe := .Values.readinessProbe }}
+            {{- if $probe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $probe.periodSeconds }}
+            periodSeconds: {{ $probe.periodSeconds }}
+            {{- end }}
+            {{- if $probe.timeoutSeconds }}
+            timeoutSeconds: {{ $probe.timeoutSeconds }}
+            {{- end }}
+            {{- if $probe.successThreshold }}
+            successThreshold: {{ $probe.successThreshold }}
+            {{- end }}
+            {{- if $probe.failureThreshold }}
+            failureThreshold: {{ $probe.failureThreshold }}
+            {{- end }}
           {{- else }}
-          httpGet:
-            path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
-            port: http
-          {{- end }}
-          {{- $probe := .Values.readinessProbe }}
-          {{- if $probe.initialDelaySeconds }}
-          initialDelaySeconds: {{ $probe.initialDelaySeconds }}
-          {{- end }}
-          {{- if $probe.periodSeconds }}
-          periodSeconds: {{ $probe.periodSeconds }}
-          {{- end }}
-          {{- if $probe.timeoutSeconds }}
-          timeoutSeconds: {{ $probe.timeoutSeconds }}
-          {{- end }}
-          {{- if $probe.successThreshold }}
-          successThreshold: {{ $probe.successThreshold }}
-          {{- end }}
-          {{- if $probe.failureThreshold }}
-          failureThreshold: {{ $probe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
+              port: http
+            {{- $probe := .Values.readinessProbe }}
+            {{- if $probe.initialDelaySeconds }}
+            initialDelaySeconds: {{ $probe.initialDelaySeconds }}
+            {{- end }}
+            {{- if $probe.periodSeconds }}
+            periodSeconds: {{ $probe.periodSeconds }}
+            {{- end }}
+            {{- if $probe.timeoutSeconds }}
+            timeoutSeconds: {{ $probe.timeoutSeconds }}
+            {{- end }}
+            {{- if $probe.successThreshold }}
+            successThreshold: {{ $probe.successThreshold }}
+            {{- end }}
+            {{- if $probe.failureThreshold }}
+            failureThreshold: {{ $probe.failureThreshold }}
+            {{- end }}
           {{- end }}
         {{- else }}
         readinessProbe:
