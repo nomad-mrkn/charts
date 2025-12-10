@@ -1,0 +1,26 @@
+{{- if .Values.verifyImagesExceptions }}
+{{- range .Values.verifyImagesExceptions }}
+---
+apiVersion: kyverno.io/v2beta1
+kind: PolicyException
+metadata:
+  name: check-image-exception-{{ .name }}
+  namespace: kyverno
+spec:
+  background: true
+  exceptions:
+  - policyName: check-image
+    ruleNames:
+    - check-image
+  match:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        - Deployment
+        namespaces:
+        - {{ .namespace }}
+        names:
+        {{- toYaml .exceptionNames | nindent 8 }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,26 @@
+{{- if .Values.runAsNonRootExceptions }}
+{{- range .Values.runAsNonRootExceptions }}
+---
+apiVersion: kyverno.io/v2beta1
+kind: PolicyException
+metadata:
+  name: run-as-nonroot-exception-{{ .name }}
+  namespace: kyverno
+spec:
+  background: true
+  exceptions:
+  - policyName: run-as-nonroot
+    ruleNames:
+    - run-as-nonroot-containers
+  match:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        - Deployment
+        namespaces:
+        - {{ .namespace }}
+        names:
+        {{- toYaml .exceptionNames | nindent 8 }}
+{{- end }}
+{{- end }}

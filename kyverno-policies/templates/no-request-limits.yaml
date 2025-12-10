@@ -1,0 +1,36 @@
+{{- if .Values.requestsLimits }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: request-limits
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.requestsLimits.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+  - name: request-limits
+    match:
+      any:
+        - resources:
+            kinds:
+              - Pod
+    {{- if .Values.requestsLimits.exclude }}
+    exclude:
+      {{- toYaml .Values.requestsLimits.exclude | nindent 6 }}
+    {{- end}}
+    validate:
+      message: "CPU and memory resource requests and limits are required."
+      pattern:
+        spec:
+          containers:
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+{{- end}}

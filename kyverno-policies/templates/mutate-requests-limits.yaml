@@ -1,0 +1,45 @@
+{{- if .Values.mutateResources }}
+{{- range .Values.mutateResources }}
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-resources-{{ .name }}
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  rules:
+  - name: mutate-resources
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          namespaces:
+          - {{ .namespace }}
+    mutate:
+      targets:
+      - apiVersion: v1
+        kind: Pod
+        name: {{`"{{ request.object.metadata.name }}"`}}
+        namespace: {{ .namespace }}
+      preconditions:
+        all:
+          - key: {{`"{{ time_diff('{{request.object.metadata.creationTimestamp}}','{{ time_now_utc() }}') }}"`}}
+            operator: GreaterThan
+            value: "10m"
+      foreach:
+      - list: "request.object.spec.[ephemeralContainers, initContainers, containers][]"
+        patchStrategicMerge:
+          spec:
+            containers:
+            - (name): {{`"{{element.name}}"`}}
+              resources:
+                requests:
+                  memory: "1.5Gi"
+                  cpu: "500m"
+                limits:
+                  memory: "1.5Gi"
+                  cpu: "500m"
+{{- end}}
+{{- end}}

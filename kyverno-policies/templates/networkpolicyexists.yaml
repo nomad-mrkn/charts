@@ -1,0 +1,56 @@
+{{- if .Values.networkPolicyExists}}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-namespace-network
+spec:
+  rules:
+  - name: mutate-namespace-network
+    match:
+      any:
+      - resources:
+          kinds:
+          - NetworkPolicy
+    {{- if .Values.networkPolicyExists.exclude }}
+    exclude:
+      {{- toYaml .Values.networkPolicyExists.exclude | nindent 6 }}
+    {{- end }}
+    mutate:
+      targets:
+      - apiVersion: v1
+        kind: Namespace
+        name: {{`"{{ request.object.metadata.namespace }}"`}}
+      patchStrategicMerge:
+        metadata:
+          labels:
+            networkpolicy: "true"
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: namespace-network-policy
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.networkPolicyExists.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+  - name: namespace-network-policy
+    match:
+      any:
+        - resources:
+            kinds:
+              - Namespace
+    {{- if .Values.networkPolicyExists.exclude }}
+    exclude:
+      {{- toYaml .Values.networkPolicyExists.exclude | nindent 6 }}
+    {{- end}}
+    validate:
+      message: "Network policy for namespace is missing!!"
+      pattern:
+        metadata:
+          labels:
+            networkpolicy: "true"
+{{- end }}

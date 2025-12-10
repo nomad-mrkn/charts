@@ -1,0 +1,25 @@
+{{- if .Values.verifyPorts }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: check-ports-app
+spec:
+  background: true
+  validationFailureAction: {{ .Values.verifyPorts.validationFailureAction }}
+  rules:
+    - name: check-ports-app
+      match:
+        any:
+        - resources:
+            kinds:
+            - Deployment
+      validate:
+        message: "Only whitelisted ports are allowed"
+        pattern:
+          spec:
+            template:
+              spec:
+                containers:
+                    ports:
+                      - containerPort: 80
+{{- end }}

@@ -1,0 +1,33 @@
+{{- if .Values.customPodSecurity }}
+{{- range .Values.customPodSecurity }}
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: pod-security-{{ .name }}
+spec:
+  background: true
+  validationFailureAction: Enforce
+  rules:
+  - name: baseline-service-mesh
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          {{- if .matchnames }}
+          names:
+            {{- toYaml .matchnames | nindent 12 }}
+          {{- end }}
+    {{- if .exclude }}
+    exclude:
+      {{- toYaml .exclude | nindent 6 }}
+    {{- end }}
+    validate:
+      podSecurity:
+        level: {{ .level }}
+        version: {{ .version }}
+        exclude:
+        {{- toYaml .securityExclusions | nindent 8 }}
+{{- end}}
+{{- end}}

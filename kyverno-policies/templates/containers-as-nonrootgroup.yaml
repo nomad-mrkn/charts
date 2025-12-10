@@ -1,0 +1,54 @@
+{{- if .Values.runAsNonRootGroup }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: run-as-nonroot-group
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.runAsNonRootGroup.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+  - name: run-as-nonroot-group
+    match:
+      any:
+        - resources:
+            kinds:
+              - Pod
+    {{- if .Values.runAsNonRootGroup.exclude }}
+    exclude:
+      {{- toYaml .Values.runAsNonRootGroup.exclude | nindent 6 }}
+    {{- end }}
+    validate:
+        message: >-
+          Running with root group IDs is disallowed. The fields
+          spec.securityContext.runAsGroup, spec.containers[*].securityContext.runAsGroup,
+          spec.initContainers[*].securityContext.runAsGroup, and
+          spec.ephemeralContainers[*].securityContext.runAsGroup must be
+          set to a value greater than zero.
+        anyPattern:
+        - spec:
+            securityContext:
+              runAsGroup: ">0"
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(runAsGroup): ">0"
+            =(initContainers):
+              - =(securityContext):
+                  =(runAsGroup): ">0"
+            containers:
+              - =(securityContext):
+                  =(runAsGroup): ">0"
+        - spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  runAsGroup: ">0"
+            =(initContainers):
+              - securityContext:
+                  runAsGroup: ">0"
+            containers:
+              - securityContext:
+                  runAsGroup: ">0"
+{{- end}}

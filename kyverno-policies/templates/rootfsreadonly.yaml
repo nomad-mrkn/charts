@@ -1,0 +1,39 @@
+{{- if .Values.rootFsReadyOnly }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: root-fs-read-only
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.rootFsReadyOnly.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+    - name: root-fs-read-only
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      {{- if .Values.rootFsReadyOnly.exclude }}
+      exclude:
+        {{- toYaml .Values.rootFsReadyOnly.exclude | nindent 8 }}
+      {{- end }}
+      validate:
+        message: >-
+          Writing files in containers is disallowed. The fields spec.containers[*].securityContext.readOnlyRootFilesystem
+          and spec.initContainers[*].securityContext.readOnlyRootFilesystem must be set to `true`.
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(readOnlyRootFilesystem): "true"
+            =(initContainers):
+              - =(securityContext):
+                  =(readOnlyRootFilesystem): "true"
+            containers:
+              - =(securityContext):
+                  =(readOnlyRootFilesystem): "true"
+{{- end }}

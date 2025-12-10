@@ -1,0 +1,27 @@
+{{- if .Values.denyRoleAggregation }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-aggregation
+  annotations:
+    policies.kyverno.io/title: Deny RBAC Aggregation
+spec:
+  validationFailureAction: {{ .Values.denyRoleAggregation.validationFailureAction }}
+  background: true
+  rules:
+    - name: block-aggregation-rule-creation
+      match:
+        any:
+        - resources:
+            kinds:
+              - ClusterRole
+      preconditions:
+        all:
+        - key: {{`"{{ request.operation }}"`}}
+          operator: In
+          value: ["CREATE", "UPDATE"]
+      validate:
+        message: "RBAC aggregation is completely disabled in this cluster. ClusterRoles cannot have aggregationRule."
+        pattern:
+          aggregationRule: null
+{{- end }}

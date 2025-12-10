@@ -1,0 +1,47 @@
+{{- if .Values.impersonate }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-impersonate
+  annotations:
+    policies.kyverno.io/title: Deny impersonate for RBAC
+spec:
+  validationFailureAction: {{ .Values.impersonate.validationFailureAction }}
+  background: false
+  rules:
+    - name: deny-impersonate
+      match:
+        any:
+          - resources:
+              kinds:
+                - Role
+                - ClusterRole
+      preconditions:
+        all:
+          - key: {{`"{{ request.operation }}"`}}
+            operator: In
+            value:
+              - CREATE
+              - UPDATE
+      validate:
+        message: "Impersonate permissions are not allowed."
+        foreach:
+        - list: "request.object.rules[]"
+          deny:
+            conditions:
+              all:
+                - key: {{`"{{ element.apiGroups || '' }}"`}}
+                  operator: AnyIn
+                  value:
+                    - rbac.authorization.k8s.io
+                - key: {{`"{{ element.resources || '' }}"`}}
+                  operator: AnyIn
+                  value:
+                    - impersonate
+                - key: {{`"{{ element.verbs }}"`}}
+                  operator: AnyIn
+                  value:
+                    - users
+                    - groups
+                    - serviceaccounts
+{{- end }}

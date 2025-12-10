@@ -1,0 +1,39 @@
+{{- if .Values.verifyImages }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: check-image
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.verifyImages.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+    - name: check-image
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      verifyImages:
+      - imageReferences:
+          {{- range .Values.verifyImages.images }}
+          - {{ .image | quote }}
+          {{- end }}
+        mutateDigest: false
+        verifyDigest: false
+        attestors:
+        - entries:
+          - keys:
+              publicKeys: |-
+                -----BEGIN PUBLIC KEY-----
+                MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEMdX1AGGzbMqf3J6zHr61aF3HPUN2
+                OJaVfitqIqBNWPzd1MMzIR/hIJqDNJlpeIwCpEbRuROWplsCpBJyGF57zQ==
+                -----END PUBLIC KEY-----
+              rekor:
+                ignoreTlog: true
+              ctlog:
+                ignoreSCT: true
+  {{- end }}

@@ -1,0 +1,39 @@
+{{- if .Values.disallowPrivileged }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-privileged
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.disallowPrivileged.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+    - name: privileged-containers
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      {{- if .Values.disallowPrivileged.exclude }}
+      exclude:
+        {{- toYaml .Values.disallowPrivileged.exclude | nindent 8 }}
+      {{- end }}
+      validate:
+        message: >-
+          Privileged mode is disallowed. The fields spec.containers[*].securityContext.privileged
+          and spec.initContainers[*].securityContext.privileged must be unset or set to `false`.
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(privileged): "false"
+            =(initContainers):
+              - =(securityContext):
+                  =(privileged): "false"
+            containers:
+              - =(securityContext):
+                  =(privileged): "false"
+{{- end }}

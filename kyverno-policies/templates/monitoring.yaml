@@ -1,0 +1,28 @@
+{{- if .Values.monitoring }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: check-monitoring
+  namespace: kyverno
+spec:
+  validationFailureAction: {{ .Values.monitoring.validationFailureAction }}
+  rules:
+    - name: check-label-monitor
+      match:
+        any:
+        - resources:
+            kinds:
+            - VMServiceScrape
+      {{- if .Values.monitoring.exclude }}
+      exclude:
+        {{- toYaml .Values.monitoring.exclude | nindent 8 }}
+      {{- end}}
+      validate:
+        message: "The label `monitor=true` is required."
+        pattern:
+          spec:
+            template:
+              metadata:
+                labels:
+                  monitor: "true"
+{{- end }}

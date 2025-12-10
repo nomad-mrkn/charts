@@ -1,0 +1,34 @@
+{{- if .Values.mutateLabels }}
+{{- range .Values.mutateLabels }}
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-ttl-labels-{{ .name }}
+spec:
+  rules:
+  - name: mutate-ttl-labels
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          {{- if .matchnames }}
+          names:
+            {{- toYaml .matchnames | nindent 12 }}
+          {{- end}}
+    {{- if .exclude }}
+    exclude:
+      {{- toYaml .exclude | nindent 6 }}
+    {{- end }}
+    mutate:
+      targets:
+      - apiVersion: v1
+        kind: Namespace
+        name: {{`"{{ request.object.metadata.name }}"`}}
+      patchStrategicMerge:
+        metadata:
+          labels:
+            cleanup.kyverno.io/ttl: {{ .ttl }}
+{{- end}}
+{{- end}}

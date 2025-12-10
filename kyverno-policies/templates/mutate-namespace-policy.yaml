@@ -1,0 +1,40 @@
+{{- if .Values.mutateNsPolicy }}
+{{- range .Values.mutateNsPolicy }}
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-ns-policy-{{ .name }}
+spec:
+  rules:
+  - name: mutate-ns-policy
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+          {{- if .matchnames }}
+          names:
+            {{- toYaml .matchnames | nindent 12 }}
+          {{- end}}
+    {{- if .exclude }}
+    exclude:
+      {{- toYaml .exclude | nindent 6 }}
+    {{- end }}
+    mutate:
+      targets:
+      - apiVersion: v1
+        kind: Namespace
+        name: {{`"{{ request.object.metadata.name }}"`}}
+      patchStrategicMerge:
+        metadata:
+          {{- if .labels }}
+          labels:
+            {{- toYaml .labels | nindent 12 }}
+          {{- end}}
+          {{- if .annotations }}
+          annotations:
+            {{- toYaml .annotations | nindent 12 }}
+          {{- end}}
+{{- end}}
+{{- end}}

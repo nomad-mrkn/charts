@@ -1,0 +1,26 @@
+{{- if .Values.disallowPrivilegedExceptions }}
+{{- range .Values.disallowPrivilegedExceptions }}
+---
+apiVersion: kyverno.io/v2beta1
+kind: PolicyException
+metadata:
+  name: disallow-privileged-exception-{{ .name }}
+  namespace: kyverno
+spec:
+  background: true
+  exceptions:
+  - policyName: disallow-privileged
+    ruleNames:
+    - privileged-containers
+  match:
+    any:
+    - resources:
+        kinds:
+        - Pod
+        - Deployment
+        namespaces:
+        - {{ .namespace }}
+        names:
+        {{- toYaml .exceptionNames | nindent 8 }}
+{{- end }}
+{{- end }}

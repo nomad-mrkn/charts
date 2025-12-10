@@ -1,0 +1,7 @@
+apiVersion: v2
+appVersion: v0.0.1
+description: Kubernetes Pod Security Standards implemented as Kyverno policies for
+  Okko
+name: kyverno-policies
+type: application
+version: 0.0.1-158R

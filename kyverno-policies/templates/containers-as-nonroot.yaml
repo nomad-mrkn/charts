@@ -1,0 +1,53 @@
+{{- if .Values.runAsNonRoot }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: run-as-nonroot
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.runAsNonRoot.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+  - name: run-as-nonroot-containers
+    match:
+      any:
+        - resources:
+            kinds:
+              - Pod
+    {{- if .Values.runAsNonRoot.exclude }}
+    exclude:
+      {{- toYaml .Values.runAsNonRoot.exclude | nindent 6 }}
+    {{- end}}
+    validate:
+      message: >-
+        Running as root is not allowed. Either the field spec.securityContext.runAsNonRoot
+        must be set to `true`, or the fields spec.containers[*].securityContext.runAsNonRoot,
+        spec.initContainers[*].securityContext.runAsNonRoot, and spec.ephemeralContainers[*].securityContext.runAsNonRoot
+        must be set to `true`.
+      anyPattern:
+        - spec:
+            securityContext:
+              runAsNonRoot: true
+            =(ephemeralContainers):
+              - =(securityContext):
+                  =(runAsNonRoot): true
+            =(initContainers):
+              - =(securityContext):
+                  =(runAsNonRoot): true
+            containers:
+              - =(securityContext):
+                  =(runAsNonRoot): true
+        - spec:
+            =(ephemeralContainers):
+              - securityContext:
+                  runAsNonRoot: true
+            =(initContainers):
+              - securityContext:
+                  runAsNonRoot: true
+            containers:
+              - securityContext:
+                  runAsNonRoot: true
+{{- end }}

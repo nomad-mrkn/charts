@@ -1,0 +1,37 @@
+{{- if .Values.denyBuiltInUsers }}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-built-in-roles-users
+  annotations:
+    policies.kyverno.io/title: deny-built-in-roles-users
+    policies.kyverno.io/description: Deny built-in roles for users
+spec:
+  validationFailureAction: {{ .Values.denyBuiltInUsers.validationFailureAction }}
+  background: true
+  rules:
+    - name: deny-all-user-bindings
+      match:
+        any:
+          - resources:
+              kinds:
+                - RoleBinding
+                - ClusterRoleBinding
+      preconditions:
+        all:
+          - key: {{`"{{ request.operation }}"`}}
+            operator: In
+            value:
+              - CREATE
+              - UPDATE
+      validate:
+        message: Built-in roles with user is not allowed.
+        foreach:
+          - list: "request.object.subjects"
+            deny:
+              conditions:
+                all:
+                  - key: {{`"{{ element.kind }}"`}}
+                    operator: Equals
+                    value: User
+{{- end }}

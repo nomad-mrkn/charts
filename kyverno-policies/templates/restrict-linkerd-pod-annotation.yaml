@@ -1,0 +1,28 @@
+{{- if .Values.restrictLinkerdPodAnnotation }}
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-linkerd-pod-annotation
+spec:
+  background: false
+  validationFailureAction: {{ .Values.restrictLinkerdPodAnnotation.validationFailureAction }}
+  background: false
+  rules:
+  - name: pod-linkerd-policy
+    match:
+      any:
+      - resources:
+          kinds:
+            - Pod
+    {{- if .Values.restrictLinkerdPodAnnotation.exclude }}
+    exclude:
+      {{- toYaml .Values.restrictLinkerdPodAnnotation.exclude | nindent 6 }}
+    {{- end }}
+    validate:
+      message: "Linkerd Pod annotation is missing!'"
+      pattern:
+        metadata:
+          annotations:
+            linkerd.io/inject: enabled
+{{- end }}

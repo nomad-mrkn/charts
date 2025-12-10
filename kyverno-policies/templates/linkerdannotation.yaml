@@ -1,0 +1,59 @@
+{{- if .Values.linkerdAnnotationExists}}
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-namespace-linkerd
+spec:
+  rules:
+  - name: mutate-namespace-linkerd
+    match:
+      any:
+      - resources:
+          annotations:
+            linkerd.io/inject: "enabled"
+          kinds:
+          - Pod
+          - Deployment
+    {{- if .Values.linkerdAnnotationExists.exclude }}
+    exclude:
+      {{- toYaml .Values.linkerdAnnotationExists.exclude | nindent 6 }}
+    {{- end }}
+    mutate:
+      targets:
+      - apiVersion: v1
+        kind: Namespace
+        name: {{`"{{ request.object.metadata.namespace }}"`}}
+      patchStrategicMerge:
+        metadata:
+          labels:
+            linkerdenabled: "true"
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: namespace-linkerd-policy
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+spec:
+  validationFailureAction: {{ .Values.linkerdAnnotationExists.validationFailureAction }}
+  background: true
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+  - name: namespace-linkerd-policy
+    match:
+      any:
+        - resources:
+            kinds:
+              - Namespace
+    {{- if .Values.linkerdAnnotationExists.exclude }}
+    exclude:
+      {{- toYaml .Values.linkerdAnnotationExists.exclude | nindent 6 }}
+    {{- end}}
+    validate:
+      message: "Linkerd annotation is missing!"
+      pattern:
+        metadata:
+          labels:
+            linkerdenabled: "true"
+{{- end }}

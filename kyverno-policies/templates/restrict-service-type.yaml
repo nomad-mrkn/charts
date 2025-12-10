@@ -1,0 +1,47 @@
+{{- if .Values.restrictServiceType }}
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-external-service-types
+spec:
+  validationFailureAction: {{ .Values.restrictServiceType.validationFailureAction }}
+  background: false
+  rules:
+    - name: deny-loadbalancer-services
+      match:
+        any:
+        - resources:
+            kinds:
+              - Service
+      {{- if .Values.restrictServiceType.exclude }}
+      exclude:
+        {{- toYaml .Values.restrictServiceType.exclude | nindent 8 }}
+      {{- end }}
+      validate:
+        message: "LoadBalancer service type is not allowed. Use ClusterIP instead."
+        deny:
+          conditions:
+            any:
+            - key: {{`"{{ request.object.spec.type }}"`}}
+              operator: Equals
+              value: "LoadBalancer"
+    - name: deny-nodeport-services
+      match:
+        any:
+        - resources:
+            kinds:
+              - Service
+      {{- if .Values.restrictServiceType.exclude }}
+      exclude:
+        {{- toYaml .Values.restrictServiceType.exclude | nindent 8 }}
+      {{- end }}
+      validate:
+        message: "NodePort service type is not allowed. Use ClusterIP instead."
+        deny:
+          conditions:
+            any:
+            - key: {{`"{{ request.object.spec.type }}"`}}
+              operator: Equals
+              value: "NodePort"
+{{- end }}
