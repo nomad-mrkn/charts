@@ -18,7 +18,7 @@ rules:
 
 - apiGroups: ['']
   resources: [serviceaccounts, services, configmaps, secrets]
-  verbs: [create, update, patch, get, list, watch, delete]
+  verbs: [create, update, patch, get, list, watch, delete, pods/log]
 
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [roles, rolebindings]
