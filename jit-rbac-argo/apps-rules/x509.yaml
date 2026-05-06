@@ -1,5 +1,5 @@
 appName: k8s-spb2-backend1-x509
-namespace: x509
+namespace: x509-certificate-exporter
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
 roleName: argocd-manager-x509

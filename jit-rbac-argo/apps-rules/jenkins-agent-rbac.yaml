@@ -1,5 +1,5 @@
 appName: k8s-spb2-backend1-jenkins-agent-rbac
-namespace: jenkins
+namespace: jenkins-agent
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
 roleName: argocd-manager-jenkins-agent-rbac

@@ -1,5 +1,5 @@
 appName: k8s-spb2-backend1-vault-operator
-namespace: vault-secrets-operator-system
+namespace: vault-operator
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
 roleName: argocd-manager-vault-operator
