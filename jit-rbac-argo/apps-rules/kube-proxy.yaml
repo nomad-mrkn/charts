@@ -9,7 +9,7 @@ rules:
   verbs: [create, update, patch, get, list, delete]
 
 - apiGroups: ['']
-  resources: [configmaps, serviceaccounts]
+  resources: [configmaps, serviceaccounts, pods, pods/log]
   verbs: [create, update, patch, get, list, delete]
 
 markerRole:
