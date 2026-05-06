@@ -1,0 +1,16 @@
+syncWave: "-1"
+hookDeletePolicy: HookFailed
+
+appName: ""
+namespace: ""
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: ""
+
+rules: []
+
+markerRole:
+  enabled: true
+  rules: []
+
+image: bitnami/kubectl:latest
