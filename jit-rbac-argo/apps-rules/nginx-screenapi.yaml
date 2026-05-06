@@ -1,0 +1,60 @@
+appName: k8s-spb2-backend1-screenapi-nginx
+namespace: screenapi
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: argocd-manager-nginx-screenapi
+rules:
+- apiGroups: [apps]
+  resources: [deployments, daemonsets, replicasets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: ['']
+  resources: [serviceaccounts, services, configmaps, secrets, pods, endpoints, events, namespaces]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [rbac.authorization.k8s.io]
+  resources: [roles, rolebindings]
+  verbs: [get, list, create, update, patch]
+
+- apiGroups: [networking.k8s.io]
+  resources: [ingressclasses, ingresses, ingresses/status]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [coordination.k8s.io]
+  resources: [leases]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [discovery.k8s.io]
+  resources: [endpointslices]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [policy]
+  resources: [poddisruptionbudgets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [networking.k8s.io]
+  resources: [networkpolicies]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [autoscaling]
+  resources: [horizontalpodautoscalers]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [batch]
+  resources: [jobs]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [admissionregistration.k8s.io]
+  resources: [validatingwebhookconfigurations]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [keda.sh]
+  resources: [scaledobjects]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [cert-manager.io]
+  resources: [issuers, certificates]
+  verbs: [create, update, patch, get, list, watch]
+
+markerRole:
+  enabled: true

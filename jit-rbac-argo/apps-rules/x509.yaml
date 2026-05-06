@@ -1,0 +1,24 @@
+appName: k8s-spb2-backend1-x509
+namespace: x509
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: argocd-manager-x509
+rules:
+- apiGroups: [apps]
+  resources: [deployments, replicasets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: ['']
+  resources: [serviceaccounts, services]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: ['']
+  resources: [namespaces, secrets]
+  verbs: [get, list, watch]
+
+- apiGroups: [rbac.authorization.k8s.io]
+  resources: [roles, rolebindings]
+  verbs: [get, list, create, update, patch]
+
+markerRole:
+  enabled: true

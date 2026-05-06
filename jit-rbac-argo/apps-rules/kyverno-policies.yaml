@@ -1,0 +1,12 @@
+appName: k8s-spb2-backend1-kyverno-policies
+namespace: kyverno
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: argocd-manager-kyverno-policies
+rules:
+- apiGroups: [kyverno.io]
+  resources: [clusterpolicies, clusterpolicies/status, policyexceptions]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+markerRole:
+  enabled: true

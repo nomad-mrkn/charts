@@ -1,0 +1,16 @@
+appName: k8s-spb2-backend1-kube-proxy
+namespace: kube-system
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: argocd-manager-kube-proxy
+rules:
+- apiGroups: [apps]
+  resources: [daemonsets]
+  verbs: [create, update, patch, get, list, delete]
+
+- apiGroups: ['']
+  resources: [configmaps, serviceaccounts]
+  verbs: [create, update, patch, get, list, delete]
+
+markerRole:
+  enabled: true

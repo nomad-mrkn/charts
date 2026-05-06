@@ -1,0 +1,48 @@
+appName: k8s-spb2-backend1-fluent-bit
+namespace: fluent-bit
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: argocd-manager-fluent-bit
+rules:
+- apiGroups: [apps]
+  resources: [daemonsets, deployments, replicasets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: ['']
+  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log, events, endpoints]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: ['']
+  resources: [namespaces]
+  verbs: [create, get, list, watch]
+
+- apiGroups: ['']
+  resources: [nodes, nodes/proxy]
+  verbs: [get, list, watch]
+
+- apiGroups: [rbac.authorization.k8s.io]
+  resources: [roles, rolebindings]
+  verbs: [get, list, create, update, patch]
+
+- apiGroups: [monitoring.coreos.com]
+  resources: [servicemonitors, prometheusrules]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [networking.k8s.io]
+  resources: [networkpolicies]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [policy]
+  resources: [podsecuritypolicies]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [autoscaling.k8s.io]
+  resources: [verticalpodautoscalers]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [batch]
+  resources: [jobs]
+  verbs: [create, list, get, watch, update]
+
+markerRole:
+  enabled: true

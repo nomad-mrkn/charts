@@ -1,0 +1,36 @@
+appName: k8s-spb2-backend1-vector
+namespace: vector
+serviceAccountName: argocd-manager
+serviceAccountNamespace: kube-system
+roleName: argocd-manager-vector
+rules:
+- apiGroups: [apps]
+  resources: [daemonsets, deployments, statefulsets, replicasets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: ['']
+  resources: [serviceaccounts, services, configmaps, secrets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [rbac.authorization.k8s.io]
+  resources: [roles, rolebindings]
+  verbs: [get, list, create, update, patch]
+
+- apiGroups: [operator.victoriametrics.com]
+  resources: [vmpodscrapes]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [networking.k8s.io]
+  resources: [ingresses]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [policy]
+  resources: [poddisruptionbudgets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [autoscaling]
+  resources: [horizontalpodautoscalers]
+  verbs: [create, update, patch, get, list, watch]
+
+markerRole:
+  enabled: true
