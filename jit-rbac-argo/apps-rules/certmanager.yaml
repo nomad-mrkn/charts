@@ -8,7 +8,45 @@ rules:
     resources: [customresourcedefinitions]
     verbs: [create, update, patch, get, list, watch]
 
-  # Runtime permissions (not needed for deployment, used by cert-manager itself)
+  - apiGroups: [admissionregistration.k8s.io]
+    resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations]
+    verbs: [create, update, patch, get, list, watch, delete]
+
+  - apiGroups: [apps]
+    resources: [deployments, replicasets]
+    verbs: [create, update, patch, get, list, watch, delete]
+
+  - apiGroups: [""]
+    resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log, events]
+    verbs: [create, update, patch, get, list, watch, delete]
+
+  - apiGroups: [""]
+    resources: [namespaces]
+    verbs: [create, get, list, watch]
+
+  - apiGroups: [""]
+    resources: [serviceaccounts/token]
+    verbs: [create]
+
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [roles, rolebindings]
+    verbs: [get, list, create, update, patch]
+
+  - apiGroups: [coordination.k8s.io]
+    resources: [leases]
+    verbs: [create, update, patch, get, list, watch]
+
+  - apiGroups: [batch]
+    resources: [jobs]
+    verbs: [create, delete, list, get, watch, update]
+
+markerRole:
+  enabled: true
+
+  # - apiGroups: [authorization.k8s.io]
+  #   resources: [subjectaccessreviews]
+  #   verbs: [create]
+
   # - apiGroups: [cert-manager.io]
   #   resources: [certificates, certificaterequests, issuers, clusterissuers, certificaterequests/status, certificaterequests/finalizers, certificates/status, certificates/finalizers, clusterissuers/status, issuers/status]
   #   verbs: [create, update, patch, get, list, watch, delete]
@@ -40,45 +78,4 @@ rules:
   # - apiGroups: [route.openshift.io]
   #   resources: [routes/custom-host]
   #   verbs: [create]
-
-  - apiGroups: [admissionregistration.k8s.io]
-    resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations]
-    verbs: [create, update, patch, get, list, watch, delete]
-
-  - apiGroups: [apps]
-    resources: [deployments, replicasets]
-    verbs: [create, update, patch, get, list, watch, delete]
-
-  - apiGroups: [""]
-    resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log, events]
-    verbs: [create, update, patch, get, list, watch, delete]
-
-  - apiGroups: [""]
-    resources: [namespaces]
-    verbs: [create, get, list, watch]
-
-  # Needed to create Roles that grant token creation (RBAC escalation prevention)
-  - apiGroups: [""]
-    resources: [serviceaccounts/token]
-    verbs: [create]
-
-  - apiGroups: [rbac.authorization.k8s.io]
-    resources: [roles, rolebindings]
-    verbs: [get, list, create, update, patch]
-
-  # Runtime permissions (used by cert-manager for auth checks)
-  # - apiGroups: [authorization.k8s.io]
-  #   resources: [subjectaccessreviews]
-  #   verbs: [create]
-
-  # Needed to create Roles that grant lease access (RBAC escalation prevention)
-  - apiGroups: [coordination.k8s.io]
-    resources: [leases]
-    verbs: [create, update, patch, get, list, watch]
-
-  - apiGroups: [batch]
-    resources: [jobs]
-    verbs: [create, delete, list, get, watch, update]
-
-markerRole:
-  enabled: true
+  
