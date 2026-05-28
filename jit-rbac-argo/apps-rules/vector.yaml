@@ -9,7 +9,7 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: ['']
-  resources: [serviceaccounts, services, configmaps, secrets]
+  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
   verbs: [create, update, patch, get, list, watch]
 
 # Vector chart creates ClusterRole/ClusterRoleBinding

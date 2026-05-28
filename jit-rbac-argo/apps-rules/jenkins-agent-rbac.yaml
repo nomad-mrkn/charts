@@ -5,7 +5,7 @@ serviceAccountNamespace: kube-system
 roleName: argocd-manager-jenkins-agent-rbac
 rules:
 - apiGroups: ['']
-  resources: [serviceaccounts, secrets]
+  resources: [serviceaccounts, secrets, pods, pods/log]
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [rbac.authorization.k8s.io]

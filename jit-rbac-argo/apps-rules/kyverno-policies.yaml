@@ -4,6 +4,10 @@ serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
 roleName: argocd-manager-kyverno-policies
 rules:
+- apiGroups: ['']
+  resources: [pods, pods/log]
+  verbs: [get, list]
+
 - apiGroups: [kyverno.io]
   resources: [clusterpolicies, clusterpolicies/status, policyexceptions]
   verbs: [create, update, patch, get, list, watch, delete]

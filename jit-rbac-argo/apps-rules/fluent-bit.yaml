@@ -19,7 +19,7 @@ rules:
 
 # RBAC escalation: fluent-bit ClusterRole needs these to read logs
 - apiGroups: [""]
-  resources: [pods, namespaces]
+  resources: [pods, pods/log, namespaces]
   verbs: [get, list, watch]
 
 # Optional: only if rbac.nodeAccess=true

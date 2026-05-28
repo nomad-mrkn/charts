@@ -29,7 +29,7 @@ rules:
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services, configmaps, secrets]
+  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
   verbs: [create, update, patch, get, list, delete]
 
 # Runtime permissions (used by operator, not deploy)
