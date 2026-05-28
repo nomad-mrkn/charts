@@ -17,7 +17,7 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: ['']
-  resources: [serviceaccounts, services, configmaps, secrets, pods/log]
+  resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch, delete]
 
 # Keda creates ClusterRoles + Roles
