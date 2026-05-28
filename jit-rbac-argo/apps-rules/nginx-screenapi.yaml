@@ -10,11 +10,11 @@ rules:
 
 - apiGroups: ['']
   resources: [serviceaccounts, services, configmaps, secrets, pods, endpoints, events, namespaces]
-  verbs: [create, update, patch, get, list, watch]
+  verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch]
+  resources: [roles, rolebindings, clusterroles, clusterrolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [networking.k8s.io]
   resources: [ingressclasses, ingresses, ingresses/status]
