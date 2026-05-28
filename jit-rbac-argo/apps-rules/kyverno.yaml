@@ -8,21 +8,18 @@ rules:
   resources: [customresourcedefinitions]
   verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: ['']
-  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
+- apiGroups: [""]
+  resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [apps]
-  resources: [deployments, replicasets]
-  verbs: [create, update, patch, get, list, watch]
+  resources: [deployments]
+  verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [apps]
-  resources: [deployments/scale]
-  verbs: [get, list, watch, patch, update]
-
+# Kyverno creates 13 ClusterRoles + 4 Roles
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch, escalate]
+  resources: [clusterroles, clusterrolebindings, roles, rolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [coordination.k8s.io]
   resources: [leases]
@@ -48,14 +45,16 @@ rules:
   resources: [jobs, cronjobs]
   verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [kyverno.io]
-  resources: [policies, policies/status, clusterpolicies, clusterpolicies/status, updaterequests, updaterequests/status, cleanuppolicies, clustercleanuppolicies, globalcontextentries, globalcontextentries/status,
-    admissionreports, clusteradmissionreports, backgroundscanreports, clusterbackgroundscanreports, policyexceptions]
-  verbs: [create, update, patch, get, list, watch]
+# --- Runtime permissions (NOT needed for deploy) ---
+# Kyverno CRDs are used by kyverno itself, not by ArgoCD during deploy
+# - apiGroups: [kyverno.io]
+#   resources: [policies, policies/status, clusterpolicies, clusterpolicies/status, updaterequests, updaterequests/status, cleanuppolicies, clustercleanuppolicies, globalcontextentries, globalcontextentries/status,
+#     admissionreports, clusteradmissionreports, backgroundscanreports, clusterbackgroundscanreports, policyexceptions]
+#   verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [reports.kyverno.io]
-  resources: [ephemeralreports, clusterephemeralreports]
-  verbs: [create, update, patch, get, list, watch]
+# - apiGroups: [reports.kyverno.io]
+#   resources: [ephemeralreports, clusterephemeralreports]
+#   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [monitoring.coreos.com]
   resources: [servicemonitors]

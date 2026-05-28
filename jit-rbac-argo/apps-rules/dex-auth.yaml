@@ -10,7 +10,7 @@ rules:
     verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: [""]
-    resources: ["services", "configmaps", "secrets", "pods", "pods/log"]
+    resources: ["services", "configmaps", "secrets"]
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
   - apiGroups: ["networking.k8s.io"]

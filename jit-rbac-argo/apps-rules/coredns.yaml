@@ -13,9 +13,10 @@ rules:
     resources: [serviceaccounts, services, configmaps, pods, events]
     verbs: [create, update, patch, get, list, watch]
 
+# CoreDNS chart creates ClusterRole/ClusterRoleBinding, not Role
   - apiGroups: [rbac.authorization.k8s.io]
-    resources: [roles, rolebindings]
-    verbs: [get, list, create, update, patch]
+    resources: [clusterroles, clusterrolebindings]
+    verbs: [get, list, create, update, patch, delete]
 
 # markerRole:
 #   enabled: true

@@ -8,8 +8,8 @@ rules:
   resources: [daemonsets]
   verbs: [create, update, patch, get, list, delete]
 
-- apiGroups: ['']
-  resources: [configmaps, serviceaccounts, pods, pods/log]
+- apiGroups: [""]
+  resources: [configmaps, serviceaccounts]
   verbs: [create, update, patch, get, list, delete]
 
 # markerRole:

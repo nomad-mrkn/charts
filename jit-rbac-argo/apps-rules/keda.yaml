@@ -20,9 +20,10 @@ rules:
   resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch, delete]
 
+# Keda creates ClusterRoles + Roles
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch]
+  resources: [clusterroles, clusterrolebindings, roles, rolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [policy]
   resources: [poddisruptionbudgets]

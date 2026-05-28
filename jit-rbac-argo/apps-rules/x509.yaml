@@ -16,9 +16,10 @@ rules:
   resources: [namespaces, secrets]
   verbs: [get, list, watch]
 
+# x509 chart creates ClusterRole/ClusterRoleBinding
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch]
+  resources: [clusterroles, clusterrolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 # markerRole:
 #   enabled: true

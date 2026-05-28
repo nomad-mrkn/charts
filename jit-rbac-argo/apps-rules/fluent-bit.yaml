@@ -5,24 +5,32 @@ serviceAccountNamespace: kube-system
 roleName: argocd-manager-fluent-bit
 rules:
 - apiGroups: [apps]
-  resources: [daemonsets, deployments, replicasets]
-  verbs: [create, update, patch, get, list, watch]
+  resources: [daemonsets]
+  verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: ['']
-  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log, events, endpoints]
-  verbs: [create, update, patch, get, list, watch]
+# Deploy resources
+- apiGroups: [""]
+  resources: [serviceaccounts, services, configmaps, secrets]
+  verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: ['']
+- apiGroups: [""]
   resources: [namespaces]
   verbs: [create, get, list, watch]
 
-- apiGroups: ['']
+# RBAC escalation: fluent-bit ClusterRole needs these to read logs
+- apiGroups: [""]
+  resources: [pods, namespaces]
+  verbs: [get, list, watch]
+
+# Optional: only if rbac.nodeAccess=true
+- apiGroups: [""]
   resources: [nodes, nodes/proxy]
   verbs: [get, list, watch]
 
+# Fluent-bit chart creates ClusterRole/ClusterRoleBinding
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch]
+  resources: [clusterroles, clusterrolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [monitoring.coreos.com]
   resources: [servicemonitors, prometheusrules]

@@ -28,9 +28,15 @@ rules:
   resources: [deployments, replicasets, statefulsets, daemonsets]
   verbs: [create, update, patch, get, list]
 
-- apiGroups: ['']
-  resources: [serviceaccounts, services, configmaps, secrets, endpoints, events, pods, pods/log]
-  verbs: [create, update, patch, get, list]
+# Deploy resources
+- apiGroups: [""]
+  resources: [serviceaccounts, services, configmaps, secrets]
+  verbs: [create, update, patch, get, list, delete]
+
+# Runtime permissions (used by operator, not deploy)
+# - apiGroups: [""]
+#   resources: [endpoints, events, pods, pods/log]
+#   verbs: [get, list, watch]
 
 - apiGroups: ['']
   resources: [configmaps/status]
@@ -40,9 +46,10 @@ rules:
   resources: [leases]
   verbs: [create, get, update]
 
+# Victoria-metrics-operator creates ClusterRoles + Roles
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch]
+  resources: [clusterroles, clusterrolebindings, roles, rolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [monitoring.coreos.com]
   resources: [servicemonitors]

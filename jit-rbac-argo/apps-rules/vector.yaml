@@ -12,9 +12,10 @@ rules:
   resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch]
 
+# Vector chart creates ClusterRole/ClusterRoleBinding
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [roles, rolebindings]
-  verbs: [get, list, create, update, patch]
+  resources: [clusterroles, clusterrolebindings]
+  verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [operator.victoriametrics.com]
   resources: [vmpodscrapes]
