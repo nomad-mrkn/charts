@@ -13,7 +13,7 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services]
+  resources: [serviceaccounts, services, pods/log]
   verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [rbac.authorization.k8s.io]
