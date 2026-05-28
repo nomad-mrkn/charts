@@ -12,5 +12,5 @@ rules:
   resources: [configmaps, serviceaccounts, pods, pods/log]
   verbs: [create, update, patch, get, list, delete]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

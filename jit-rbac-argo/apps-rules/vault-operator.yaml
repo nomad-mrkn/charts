@@ -44,5 +44,5 @@ rules:
   resources: [subjectaccessreviews]
   verbs: [create]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

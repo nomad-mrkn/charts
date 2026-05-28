@@ -40,5 +40,5 @@ rules:
   resources: [servicemonitors, prometheusrules, podmonitors]
   verbs: [create, update, patch, get, list, watch]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

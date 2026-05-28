@@ -40,8 +40,8 @@ rules:
     resources: [jobs]
     verbs: [create, delete, list, get, watch, update]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true
 
   # - apiGroups: [authorization.k8s.io]
   #   resources: [subjectaccessreviews]
@@ -78,4 +78,3 @@ markerRole:
   # - apiGroups: [route.openshift.io]
   #   resources: [routes/custom-host]
   #   verbs: [create]
-  

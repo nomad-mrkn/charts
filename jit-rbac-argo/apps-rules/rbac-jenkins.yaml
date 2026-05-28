@@ -12,5 +12,5 @@ rules:
   resources: [roles, rolebindings]
   verbs: [get, list, create, update, patch]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

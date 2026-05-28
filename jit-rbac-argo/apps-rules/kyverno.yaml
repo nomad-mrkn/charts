@@ -61,5 +61,5 @@ rules:
   resources: [servicemonitors]
   verbs: [create, update, patch, get, list, watch]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

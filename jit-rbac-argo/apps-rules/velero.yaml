@@ -40,5 +40,5 @@ rules:
   resources: ['*']
   verbs: ['*']
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

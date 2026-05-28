@@ -44,5 +44,5 @@ rules:
   resources: [jobs]
   verbs: [create, list, get, watch, update]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

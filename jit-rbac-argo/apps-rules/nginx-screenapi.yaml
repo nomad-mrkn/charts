@@ -56,5 +56,5 @@ rules:
   resources: [issuers, certificates]
   verbs: [create, update, patch, get, list, watch]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

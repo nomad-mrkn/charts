@@ -8,5 +8,5 @@ rules:
   resources: [clusterpolicies, clusterpolicies/status, policyexceptions]
   verbs: [create, update, patch, get, list, watch, delete]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true

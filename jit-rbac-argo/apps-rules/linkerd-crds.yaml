@@ -8,5 +8,5 @@ rules:
   resources: [customresourcedefinitions]
   verbs: [create, update, patch, get, list, watch, delete]
 
-markerRole:
-  enabled: true
+# markerRole:
+#   enabled: true
