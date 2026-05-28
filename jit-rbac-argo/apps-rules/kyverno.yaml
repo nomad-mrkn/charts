@@ -13,7 +13,7 @@ rules:
   verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [apps]
-  resources: [deployments]
+  resources: [deployments, deployments/scale]
   verbs: [create, update, patch, get, list, watch, delete]
 
 # Kyverno creates 13 ClusterRoles + 4 Roles
