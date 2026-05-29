@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-x509
 namespace: x509-certificate-exporter
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -16,10 +15,6 @@ rules:
   resources: [namespaces, secrets]
   verbs: [get, list, watch]
 
-# x509 chart creates ClusterRole/ClusterRoleBinding
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [clusterroles, clusterrolebindings]
   verbs: [get, list, create, update, patch, delete]
-
-# markerRole:
-#   enabled: true

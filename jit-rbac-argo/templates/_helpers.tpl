@@ -1,7 +1,7 @@
 {{- define "jit-helm.labels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-jit-rbac/app: {{ .Values.appName }}
+jit-rbac/app: {{ .Release.Name }}
 {{- end }}
 
 {{- define "jit-helm.jitAnnotations" -}}

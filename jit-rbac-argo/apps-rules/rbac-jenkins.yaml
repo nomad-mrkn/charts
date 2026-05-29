@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-rbac-jenkins
 namespace: jenkins
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -11,6 +10,3 @@ rules:
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [roles, rolebindings]
   verbs: [get, list, create, update, patch]
-
-# markerRole:
-#   enabled: true

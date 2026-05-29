@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-screenapi-nginx
 namespace: kube-system
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -55,6 +54,3 @@ rules:
 - apiGroups: [cert-manager.io]
   resources: [issuers, certificates]
   verbs: [create, update, patch, get, list, watch]
-
-# markerRole:
-#   enabled: true

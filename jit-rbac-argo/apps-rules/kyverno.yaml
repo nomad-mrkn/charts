@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-kyverno
 namespace: kyverno
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -45,20 +44,6 @@ rules:
   resources: [jobs, cronjobs]
   verbs: [create, update, patch, get, list, watch]
 
-# --- Runtime permissions (NOT needed for deploy) ---
-# Kyverno CRDs are used by kyverno itself, not by ArgoCD during deploy
-# - apiGroups: [kyverno.io]
-#   resources: [policies, policies/status, clusterpolicies, clusterpolicies/status, updaterequests, updaterequests/status, cleanuppolicies, clustercleanuppolicies, globalcontextentries, globalcontextentries/status,
-#     admissionreports, clusteradmissionreports, backgroundscanreports, clusterbackgroundscanreports, policyexceptions]
-#   verbs: [create, update, patch, get, list, watch]
-
-# - apiGroups: [reports.kyverno.io]
-#   resources: [ephemeralreports, clusterephemeralreports]
-#   verbs: [create, update, patch, get, list, watch]
-
 - apiGroups: [monitoring.coreos.com]
   resources: [servicemonitors]
   verbs: [create, update, patch, get, list, watch]
-
-# markerRole:
-#   enabled: true

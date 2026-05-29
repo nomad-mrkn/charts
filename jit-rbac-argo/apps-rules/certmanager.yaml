@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-certmanager
 namespace: cert-manager
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -39,42 +38,4 @@ rules:
   - apiGroups: [batch]
     resources: [jobs]
     verbs: [create, delete, list, get, watch, update]
-
-# markerRole:
-#   enabled: true
-
-  # - apiGroups: [authorization.k8s.io]
-  #   resources: [subjectaccessreviews]
-  #   verbs: [create]
-
-  # - apiGroups: [cert-manager.io]
-  #   resources: [certificates, certificaterequests, issuers, clusterissuers, certificaterequests/status, certificaterequests/finalizers, certificates/status, certificates/finalizers, clusterissuers/status, issuers/status]
-  #   verbs: [create, update, patch, get, list, watch, delete]
-
-  # - apiGroups: [acme.cert-manager.io]
-  #   resources: [orders, orders/status, orders/finalizers, challenges, challenges/status, challenges/finalizers]
-  #   verbs: [create, delete, get, list, watch, update, patch]
-
-  # - apiGroups: [certificates.k8s.io]
-  #   resources: [certificatesigningrequests, certificatesigningrequests/status]
-  #   verbs: [get, list, watch, update, patch]
-
-  # - apiGroups: [certificates.k8s.io]
-  #   resources: [signers]
-  #   verbs: [sign]
-
-  # - apiGroups: [cert-manager.io]
-  #   resources: [signers]
-  #   verbs: [approve]
-
-  # - apiGroups: [gateway.networking.k8s.io]
-  #   resources: [gateways, gateways/finalizers, httproutes, httproutes/finalizers]
-  #   verbs: [get, list, watch, update, patch]
-
-  # - apiGroups: [networking.k8s.io]
-  #   resources: [ingresses, ingresses/finalizers]
-  #   verbs: [get, list, watch, update, patch]
-
-  # - apiGroups: [route.openshift.io]
-  #   resources: [routes/custom-host]
-  #   verbs: [create]
+    

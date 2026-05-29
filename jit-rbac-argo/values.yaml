@@ -1,7 +1,6 @@
 syncWave: "-1"
 hookDeletePolicy: HookFailed
 
-appName: ""
 namespace: ""
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system

@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-fluent-bit
 namespace: fluent-bit
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -8,7 +7,6 @@ rules:
   resources: [daemonsets]
   verbs: [create, update, patch, get, list, watch, delete]
 
-# Deploy resources
 - apiGroups: [""]
   resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch, delete]
@@ -17,17 +15,14 @@ rules:
   resources: [namespaces]
   verbs: [create, get, list, watch]
 
-# RBAC escalation: fluent-bit ClusterRole needs these to read logs
 - apiGroups: [""]
   resources: [pods, pods/log, namespaces]
   verbs: [get, list, watch]
 
-# Optional: only if rbac.nodeAccess=true
 - apiGroups: [""]
   resources: [nodes, nodes/proxy]
   verbs: [get, list, watch]
 
-# Fluent-bit chart creates ClusterRole/ClusterRoleBinding
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [clusterroles, clusterrolebindings]
   verbs: [get, list, create, update, patch, delete]
@@ -51,6 +46,3 @@ rules:
 - apiGroups: [batch]
   resources: [jobs]
   verbs: [create, list, get, watch, update]
-
-# markerRole:
-#   enabled: true

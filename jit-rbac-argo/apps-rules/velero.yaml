@@ -1,11 +1,8 @@
-appName: k8s-spb2-backend1-velero
 namespace: velero
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
 roleName: argocd-manager-velero
 rules:
-  # --- Deploy-time permissions ---
-
   - apiGroups: [""]
     resources: [namespaces]
     verbs: [create, get, list, watch]
@@ -22,39 +19,10 @@ rules:
     resources: [jobs]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  # Velero CRDs and resources
   - apiGroups: [velero.io]
     resources: [backupstoragelocations, volumesnapshotlocations, schedules]
     verbs: [create, update, patch, get, list, watch, delete]
-
-  # Monitoring (optional)
-  # - apiGroups: [monitoring.coreos.com]
-  #   resources: [servicemonitors, prometheusrules]
-  #   verbs: [create, update, patch, get, list, watch, delete]
-
-  # - apiGroups: [operator.victoriametrics.com]
-  #   resources: [vmservicescrapes]
-  #   verbs: [create, update, patch, get, list, watch, delete]
-
-  # --- RBAC escalation prevention ---
-  # Velero chart creates Role with wildcard permissions (role.yaml)
-  # To deploy with rbac.create=true, ArgoCD needs matching permissions
-
+    
   - apiGroups: [rbac.authorization.k8s.io]
     resources: [roles, rolebindings, clusterrolebindings]
     verbs: [get, list, create, update, patch, delete]
-
-  # CRITICAL: Required only if rbac.create=true in velero values
-  # Velero Role contains: apiGroups: ["*"], resources: ["*"], verbs: ["*"]
-  # Comment out if rbac.create=false
-  - apiGroups: ["*"]
-    resources: ["*"]
-    verbs: ["*"]
-
-  # --- Runtime permissions (NOT needed for deploy) ---
-  # - apiGroups: [velero.io]
-  #   resources: [backups, restores, downloadrequests, deletebackuprequests, podvolumebackups, podvolumerestores, serverstatusrequests]
-  #   verbs: [create, update, patch, get, list, watch, delete]
-
-# markerRole:
-#   enabled: true

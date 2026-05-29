@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-jaeger
 namespace: jaeger
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -31,6 +30,3 @@ rules:
 - apiGroups: [jaegertracing.io]
   resources: [jaegers]
   verbs: [create, update, patch, get, list, watch]
-
-# markerRole:
-#   enabled: true

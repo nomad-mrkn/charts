@@ -1,4 +1,3 @@
-appName: k8s-spb2-backend1-vault-operator
 namespace: vault-operator
 serviceAccountName: argocd-manager
 serviceAccountNamespace: kube-system
@@ -16,7 +15,6 @@ rules:
   resources: [leases]
   verbs: [create, update, patch, get, list, watch]
 
-# Vault-secrets-operator creates ClusterRole/ClusterRoleBinding
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [clusterroles, clusterrolebindings]
   verbs: [get, list, create, update, patch, delete]
@@ -44,6 +42,3 @@ rules:
 - apiGroups: [authorization.k8s.io]
   resources: [subjectaccessreviews]
   verbs: [create]
-
-# markerRole:
-#   enabled: true
