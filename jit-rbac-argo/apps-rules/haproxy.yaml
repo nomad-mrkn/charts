@@ -1,6 +1,4 @@
-namespace: haproxy
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
+namespace: haproxy-ingress
 roleName: argocd-manager-haproxy
 rules:
 - apiGroups: [apps]

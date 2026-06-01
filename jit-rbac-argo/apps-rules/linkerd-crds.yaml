@@ -1,6 +1,4 @@
 namespace: linkerd-crds
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-linkerd-crds
 rules:
 - apiGroups: ['']

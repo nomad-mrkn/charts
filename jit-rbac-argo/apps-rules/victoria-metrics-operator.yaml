@@ -1,6 +1,4 @@
 namespace: victoria-metrics-operator
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-victoria-metrics-operator
 rules:
 - apiGroups: [apiextensions.k8s.io]

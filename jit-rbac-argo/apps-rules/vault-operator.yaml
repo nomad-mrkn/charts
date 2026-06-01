@@ -1,6 +1,4 @@
 namespace: vault-operator
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-vault-operator
 rules:
 - apiGroups: [apps]

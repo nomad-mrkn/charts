@@ -1,6 +1,4 @@
 namespace: x509-certificate-exporter
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-x509
 rules:
 - apiGroups: [apps]

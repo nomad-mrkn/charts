@@ -1,6 +1,4 @@
 namespace: kube-system
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-kube-proxy
 rules:
 - apiGroups: [apps]

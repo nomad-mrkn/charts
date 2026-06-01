@@ -1,7 +1,5 @@
-namespace: fluent-bit
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
-roleName: argocd-manager-fluent-bit
+namespace: kube-events-exporter
+roleName: argocd-manager-events-exporter
 rules:
 - apiGroups: [apps]
   resources: [daemonsets]

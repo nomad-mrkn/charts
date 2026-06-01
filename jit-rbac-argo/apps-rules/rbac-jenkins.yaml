@@ -1,6 +1,4 @@
 namespace: jenkins
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-rbac-jenkins
 rules:
 - apiGroups: ['']

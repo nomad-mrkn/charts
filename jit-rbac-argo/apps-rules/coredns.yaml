@@ -1,8 +1,5 @@
-namespace: coredns
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
+namespace: kube-system
 roleName: argocd-manager-coredns
-
 rules:
   - apiGroups: [apps]
     resources: [deployments, replicasets]

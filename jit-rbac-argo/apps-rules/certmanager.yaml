@@ -1,7 +1,5 @@
 namespace: cert-manager
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
-roleName: argocd-manager-certmanager
+roleName: argocd-manager-cert-manager
 rules:
   - apiGroups: [apiextensions.k8s.io]
     resources: [customresourcedefinitions]

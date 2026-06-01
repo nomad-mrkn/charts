@@ -1,6 +1,4 @@
 namespace: kube-system
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-nginx-screenapi
 rules:
 - apiGroups: [apps]

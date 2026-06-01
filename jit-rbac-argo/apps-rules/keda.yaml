@@ -1,6 +1,4 @@
 namespace: keda
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-keda
 rules:
 - apiGroups: [apiextensions.k8s.io]

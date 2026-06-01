@@ -1,8 +1,5 @@
-namespace: dex-auth
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
-roleName: argocd-manager-dex-auth
-
+namespace: dex-k8s-authenticator
+roleName: argocd-manager-dex-k8s-authenticator
 rules:
   - apiGroups: ["apps"]
     resources: ["deployments", "replicasets"]

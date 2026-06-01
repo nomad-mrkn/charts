@@ -1,6 +1,4 @@
 namespace: velero
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-velero
 rules:
   - apiGroups: [""]

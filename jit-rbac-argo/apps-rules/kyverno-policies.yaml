@@ -1,6 +1,4 @@
 namespace: kyverno
-serviceAccountName: argocd-manager
-serviceAccountNamespace: kube-system
 roleName: argocd-manager-kyverno-policies
 rules:
 - apiGroups: ['']
