@@ -1,0 +1,30 @@
+namespace: istio-system
+roleName: argocd-manager-istio-cni
+rules:
+- apiGroups: [apps]
+  resources: [daemonsets]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [""]
+  resources: [serviceaccounts, configmaps, pods, pods/log]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [""]
+  resources: [namespaces, nodes]
+  verbs: [get, list, watch]
+
+- apiGroups: [rbac.authorization.k8s.io]
+  resources: [clusterroles, clusterrolebindings]
+  verbs: [get, list, create, update, patch, delete]
+
+- apiGroups: [k8s.cni.cncf.io]
+  resources: [network-attachment-definitions]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [""]
+  resources: [resourcequotas]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [operator.victoriametrics.com]
+  resources: [vmpodscrapes]
+  verbs: [create, update, patch, get, list, watch]

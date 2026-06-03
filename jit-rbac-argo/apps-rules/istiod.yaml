@@ -1,0 +1,50 @@
+namespace: istio-system
+roleName: argocd-manager-istiod
+rules:
+- apiGroups: [apps]
+  resources: [deployments, replicasets]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [""]
+  resources: [serviceaccounts, services, configmaps, secrets, endpoints, pods, pods/log]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [""]
+  resources: [namespaces]
+  verbs: [get, list, watch]
+
+- apiGroups: [rbac.authorization.k8s.io]
+  resources: [clusterroles, clusterrolebindings, roles, rolebindings]
+  verbs: [get, list, create, update, patch, delete]
+
+- apiGroups: [admissionregistration.k8s.io]
+  resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations, validatingadmissionpolicies, validatingadmissionpolicybindings]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [autoscaling]
+  resources: [horizontalpodautoscalers]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [policy]
+  resources: [poddisruptionbudgets]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [networking.k8s.io]
+  resources: [networkpolicies]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [discovery.k8s.io]
+  resources: [endpointslices]
+  verbs: [create, update, patch, get, list, watch, delete]
+
+- apiGroups: [gateway.networking.k8s.io]
+  resources: [gatewayclasses]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [telemetry.istio.io]
+  resources: [telemetries]
+  verbs: [create, update, patch, get, list, watch]
+
+- apiGroups: [operator.victoriametrics.com]
+  resources: [vmservicescrapes]
+  verbs: [create, update, patch, get, list, watch]
