@@ -1,0 +1,12 @@
+octopusRoleBindings:
+  - kind: RoleBinding
+    name: octopus
+    namespace: octopus
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-octopus_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

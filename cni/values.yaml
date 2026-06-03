@@ -1,0 +1,90 @@
+_internal_defaults_do_not_set:
+  affinity: {}
+  ambient:
+    configDir: ""
+    dnsCapture: true
+    enabled: false
+    enablementSelectors:
+    - podSelector:
+        matchLabels:
+          istio.io/dataplane-mode: ambient
+    - namespaceSelector:
+        matchLabels:
+          istio.io/dataplane-mode: ambient
+      podSelector:
+        matchExpressions:
+        - key: istio.io/dataplane-mode
+          operator: NotIn
+          values:
+          - none
+    ipv6: true
+    reconcileIptablesOnStartup: false
+    shareHostNetworkNamespace: false
+  chained: true
+  cniBinDir: /opt/cni/bin
+  cniConfDir: /etc/cni/net.d
+  cniConfFileName: ""
+  cniNetnsDir: /var/run/netns
+  daemonSetLabels: {}
+  env: {}
+  excludeNamespaces:
+  - kube-system
+  global:
+    defaultResources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    hub: docker.io/istio
+    imagePullPolicy: ""
+    imagePullSecrets: []
+    logAsJson: true
+    logging:
+      level: info
+    nativeNftables: false
+    resourceScope: all
+    tag: 1.28.0
+    variant: distroless
+  hub: ""
+  image: install-cni
+  istioOwnedCNIConfig: false
+  istioOwnedCNIConfigFileName: ""
+  logging:
+    level: ""
+  ownerName: ""
+  podAnnotations: {}
+  podLabels: {}
+  provider: default
+  pullPolicy: ""
+  repair:
+    brokenPodLabelKey: cni.istio.io/uninitialized
+    brokenPodLabelValue: "true"
+    deletePods: false
+    enabled: true
+    hub: ""
+    initContainerName: istio-validation
+    labelPods: false
+    repairPods: true
+    tag: ""
+  resourceQuotas:
+    enabled: false
+    pods: 5000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+  revision: ""
+  seLinuxOptions: {}
+  seccompProfile: {}
+  tag: ""
+  tolerations:
+  - effect: NoSchedule
+    operator: Exists
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  variant: ""

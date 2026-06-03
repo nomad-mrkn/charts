@@ -25,4 +25,4 @@ name: trust-manager
 sources:
 - https://github.com/cert-manager/trust-manager
 type: application
-version: v0.16.0-35R
+version: v0.16.0-507R

@@ -1,0 +1,12 @@
+ai-reviewerRoleBindings:
+  - kind: RoleBinding
+    name: ai-reviewer
+    namespace: ai-reviewer
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-ai-reviewer_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

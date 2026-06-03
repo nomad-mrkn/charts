@@ -1,0 +1,12 @@
+allure-testops-agentRoleBindings:
+  - kind: RoleBinding
+    name: allure-testops-agent
+    namespace: allure-testops-agent
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-allure-testops-agent_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

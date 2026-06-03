@@ -26,7 +26,7 @@ app:
   securityContext:
     seccompProfileEnabled: true
   trust:
-    namespace: linkerd
+    namespace: trust-manager
   webhook:
     host: 0.0.0.0
     hostNetwork: false
@@ -55,8 +55,8 @@ defaultPackage:
   resources: {}
 defaultPackageImage:
   pullPolicy: IfNotPresent
-  repository: quay.io/jetstack/trust-pkg-debian-bookworm
-  tag: "20230311.0"
+  repository: quay.io/jetstack/cert-manager-package-debian
+  tag: "20210119.0"
 filterExpiredCertificates:
   enabled: false
 image:

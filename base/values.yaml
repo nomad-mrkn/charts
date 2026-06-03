@@ -1,0 +1,14 @@
+_internal_defaults_do_not_set:
+  base:
+    enableCRDTemplates: true
+    enableIstioConfigCRDs: true
+    excludedCRDs: []
+    validationCABundle: ""
+    validationURL: ""
+  defaultRevision: default
+  experimental:
+    stableValidationPolicy: false
+  global:
+    imagePullSecrets: []
+    istioNamespace: istio-system
+    resourceScope: all

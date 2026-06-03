@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: v0.0.7
+dependencies:
+- alias: testing
+  condition: testing.enableTestingDatabases
+  name: perforator-dev
+  repository: ""
+  version: 0.x.x
+description: Perforator cluster-wide continuous profiling system (https://github.com/yandex/perforator)
+name: perforator
+type: application
+version: 0.2.19

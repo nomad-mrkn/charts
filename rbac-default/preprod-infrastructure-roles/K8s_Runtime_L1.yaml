@@ -1,0 +1,84 @@
+k8s_Runtime_L1_Role:
+  - kind: ClusterRole
+    name: K8s_Runtime_L1
+    rules:
+    # core
+    - apiGroups: [""] 
+      resources: 
+      - pods
+      - pods/exec
+      - pods/log
+      - pods/attach
+      - pods/portforward
+      - services
+      - services/status
+      - endpoints
+      - persistentvolumeclaims
+      - persistentvolumes
+      - events
+      - configmaps
+      - secrets
+      - serviceaccounts
+      - limitranges
+      - resourcequotas
+      - namespaces
+      - namespaces/status
+      - nodes
+      - nodes/spec
+      - nodes/log
+      - nodes/status
+      - nodes/metrics
+      - nodes/proxy
+      verbs: 
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+
+    - apiGroups: ["apps"]
+      resources:
+      - deployments
+      - deployments/status
+      - statefulsets
+      - statefulsets/status
+      - daemonsets
+      - daemonsets/status
+      - replicasets
+      - replicasets/status
+      - controllerrevisions
+      verbs:  
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+
+    - apiGroups: ["batch"]
+      resources:
+      - jobs
+      - jobs/status
+      - cronjobs
+      - cronjobs/status
+      verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+
+K8s_Runtime_L1_rolebinding:
+  - kind: ClusterRoleBinding
+    name: K8s_Runtime_L1
+    subjects:
+    - kind: Group
+      ldapGroup: K8s_preprod_Runtime_L1
+    roleRef:
+      kind: ClusterRole  
+      name: K8s_Runtime_L1

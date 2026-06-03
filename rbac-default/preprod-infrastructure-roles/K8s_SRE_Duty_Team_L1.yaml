@@ -1,0 +1,381 @@
+K8s_SRE_Duty_Team_L1_role:
+  - kind: ClusterRole
+    name: K8s_SRE_Duty_Team_L1
+    rules:
+    #core
+    - apiGroups: [""] 
+      resources: 
+      - pods/log
+      - services
+      - endpoints
+      - persistentvolumeclaims
+      - persistentvolumes
+      - events
+      - configmaps
+      - secrets
+      - serviceaccounts
+      - limitranges
+      - resourcequotas
+      - namespaces
+      - nodes
+      - nodes/metrics
+      - nodes/spec
+      - nodes/log
+      - nodes/status
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: [""] # RUNBOOKS KubernetesDiskPressure, KubernetesMemoryPressure, KubernetesPodCrashLooping, KubernetesPodNotHealthy, KubernetesStatefulsetDown
+      resources: 
+      - pods
+      verbs:
+      - get
+      - list
+      - watch
+      - delete
+
+    - apiGroups: ["apps"] # RUNBOOKS KubernetesDiskPressure, KubernetesMemoryPressure, KubernetesPodCrashLooping, KubernetesPodNotHealthy, KubernetesStatefulsetDown
+      resources: 
+      - statefulsets
+      verbs:
+      - get
+      - list
+      - watch
+      - delete
+
+    - apiGroups: ["apps"]
+      resources:
+      - deployments
+      - deployments/status
+      - statefulsets/status
+      - daemonsets
+      - daemonsets/status
+      - replicasets
+      - replicasets/status
+      - controllerrevisions
+      verbs:  
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["batch"]
+      resources:
+      - jobs
+      - jobs/status
+      - cronjobs
+      - cronjobs/status
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["networking.k8s.io"]
+      resources:
+      - ingresses
+      - ingresses/status
+      - networkpolicies
+      - adminnetworkpolicies
+      - gateway
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["ingress.v1.haproxy.org"]
+      resources: 
+      - backends
+      - defaults
+      - tcps
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["rbac.authorization.k8s.io"]
+      resources:
+      - roles
+      - clusterroles
+      - rolebindings
+      - clusterrolebindings
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["storage.k8s.io"]
+      resources:
+      - storageclasses
+      - volumeattachments
+      - csinodes
+      - csidrivers
+      verbs:  
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["coordination.k8s.io"]
+      resources:
+      - leases
+      verbs:  
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["metrics.k8s.io"]
+      resources: 
+      - pods
+      - nodes
+      verbs:  
+      - get
+      - list
+      - watch
+      
+    - apiGroups: ["admissionregistration.k8s.io"]
+      resources: 
+      - validatingwebhookconfigurations
+      - mutatingwebhookconfigurations
+      verbs:  
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["certificates.k8s.io"]
+      resources:
+      - certificatesigningrequests
+      - certificatesigningrequests/status
+      - certificatesigningrequests/approval
+      - signers
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["autoscaling"]
+      resources:
+      - horizontalpodautoscalers
+      - horizontalpodautoscalers/status
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["autoscaling.k8s.io"]
+      resources:
+      - verticalpodautoscalers
+      - verticalpodautoscalers/status
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["policy"]
+      resources:
+      - poddisruptionbudgets
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["scheduling.k8s.io"]
+      resources:
+      - priorityclasses
+      verbs: 
+      - get
+      - list
+      - watch
+
+    #crd
+    - apiGroups: ["apiextensions.k8s.io"]
+      resources:
+      - customresourcedefinitions
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["networking.istio.io"]
+      resources: 
+      - virtualservices
+      - gateways
+      - destinationrules
+      - envoyfilters
+      - peerauthentications
+      - serviceentries
+      - sidecars
+      - workloadentries
+      - workloadgroups
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["security.istio.io"]
+      resources: 
+      - authorizationpolicies
+      - peerauthentications
+      - requestauthentications
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["telemetry.istio.io"]
+      resources: 
+      - telemetries
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["extensions.istio.io"]
+      resources:
+      - wasmplugins
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["aquasecurity.github.io"]
+      resources: 
+      - "clustercompliancedetailreports" 
+      - "clustercompliancereports"
+      - "clusterconfigauditreports"
+      - "clusterinfraassessmentreports" 
+      - "clusterrbacassessmentreports"
+      - "clustersbomreports"
+      - "clustervulnerabilityreports"
+      - "configauditreports"
+      - "exposedsecretreports"
+      - "infraassessmentreports"
+      - "rbacassessmentreports"
+      - "sbomreports"
+      - "vulnerabilityreports"
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["ricoberger.de"]
+      resources: 
+      - vaultsecrets
+      - cassandra-vault-secrets
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["operator.victoriametrics.com"]
+      resources: 
+      - vmservicescrapes
+      - vmpodscrapes
+      - vmagents
+      - vmalertmanagerconfigs
+      - vmalertmanagers
+      - vmalerts
+      - vmauths
+      - vmclusters
+      - vmnodescrapes
+      - vmprobes
+      - vmrules
+      - vmscrapeconfigs
+      - vmsingles
+      - vmstaticscrapes
+      - vmusers
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["keda.sh"]
+      resources: 
+      - scaledobjects
+      - scaledjobs
+      - clustertriggerauthentications
+      - triggerauthentications
+      verbs:
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["monitoring.coreos.com"]
+      resources: 
+      - servicemonitors
+      - prometheusrules
+      - podmonitors
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["wgpolicyk8s.io"]
+      resources: 
+      - clusterpolicyreports
+      - policyreports
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["kyverno.io"]
+      resources:
+      - admissionreports
+      - backgroundscanreports
+      - cleanuppolicies
+      - clusteradmissionreports
+      - clusterbackgroundscanreports
+      - clustercleanuppolicies
+      - clusterephemeralreports
+      - clusterbackgroundscanreports
+      - ephemeralreports
+      - globalcontextentries
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["policy.linkerd.io"]
+      resources:
+      - authorizationpolicies
+      - egressnetworks
+      - externalworkloads
+      - httplocalratelimitpolicies
+      - httproutes
+      - meshtlsauthentications
+      - networkauthentications
+      - serverauthorizations
+      - servers
+      - serviceprofiles
+      verbs: 
+      - get
+      - list
+      - watch
+
+    - apiGroups: ["policies.kyverno.io"]
+      resources:
+      - deletingpolicies
+      - generatingpolicies
+      - imagevalidatingpolicies
+      - mutatingpolicies
+      - namespaceddeletingpolicies
+      - namespacedgeneratingpolicies
+      - namespacedimagevalidatingpolicies
+      - namespacedmutatingpolicies
+      - namespacedvalidatingpolicies
+      - policyexceptions
+      - validatingpolicies
+      verbs: 
+      - get
+      - list
+      - watch
+
+K8s_SRE_Duty_Team_L1_rolebinding:
+  - kind: ClusterRoleBinding
+    name: K8s_SRE_Duty_Team_L1
+    subjects:
+    - kind: Group
+      ldapGroup: K8s_preprod_SRE_Duty_Team_L1
+    roleRef:
+      kind: ClusterRole  
+      name: K8s_SRE_Duty_Team_L1

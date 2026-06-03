@@ -1,0 +1,16 @@
+{{ if $.Values.vault }}
+{{- range $k, $v := .Values.vault }}
+---
+apiVersion: ricoberger.de/v1alpha1
+kind: VaultSecret
+metadata:
+  name: {{ $v.name }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-10"
+spec:
+  path: {{ $v.path }}
+  type: {{ $v.type }}
+{{- end }}
+{{- end }}

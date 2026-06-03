@@ -1,0 +1,15 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: istiod{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  endpoints:
+    - port: http-monitoring
+      path: /metrics
+  selector:
+    matchLabels:
+      app: istiod
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}

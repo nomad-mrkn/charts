@@ -1,0 +1,34 @@
+{{- $allBindings := list -}}
+{{- if and .Values.roleBindings (kindIs "slice" .Values.roleBindings) -}}
+{{- range .Values.roleBindings -}}
+{{- $allBindings = append $allBindings (deepCopy .) -}}
+{{- end -}}
+{{- end -}}
+{{- range $k, $v := .Values -}}
+{{- if and (ne $k "roleBindings") (kindIs "slice" $v) (hasKey (first $v) "roleRef") -}}
+{{- range $v -}}
+{{- $allBindings = append $allBindings (deepCopy .) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- range $allBindings -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ .kind }}
+metadata:
+  name: {{ .name }}
+{{- if eq (.kind | toString) "RoleBinding" }}
+  namespace: {{ .namespace }}
+{{- end }}
+subjects:
+{{- range .subjects }}
+  - kind: Group
+    name: {{ .ldapGroup }}
+    apiGroup: rbac.authorization.k8s.io
+{{- end }}
+roleRef:
+  kind: {{ .roleRef.kind | default "ClusterRole" }}
+  name: {{ .roleRef.name | default "default-helm-template" }}
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end -}}

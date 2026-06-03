@@ -1,0 +1,17 @@
+K8s_KubeOps_role:
+  - kind: ClusterRole
+    name: K8s_KubeOps
+    rules:
+    - apiGroups: ["*"]
+      resources: ["*"]
+      verbs: ["*"]
+
+K8s_KubeOps_rolebinding:
+  - kind: ClusterRoleBinding
+    name: K8s_KubeOps
+    subjects:
+    - kind: Group
+      ldapGroup: K8s_preprod_KubeOps
+    roleRef:
+      kind: ClusterRole
+      name: K8s_KubeOps

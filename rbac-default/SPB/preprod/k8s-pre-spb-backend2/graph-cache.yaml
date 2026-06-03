@@ -1,0 +1,12 @@
+graph-cacheRoleBindings:
+  - kind: RoleBinding
+    name: graph-cache
+    namespace: graph-cache
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-graph-cache_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

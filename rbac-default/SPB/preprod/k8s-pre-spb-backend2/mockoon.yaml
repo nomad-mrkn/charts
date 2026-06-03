@@ -1,0 +1,12 @@
+mockoonRoleBindings:
+  - kind: RoleBinding
+    name: mockoon
+    namespace: mockoon
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-mockoon_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

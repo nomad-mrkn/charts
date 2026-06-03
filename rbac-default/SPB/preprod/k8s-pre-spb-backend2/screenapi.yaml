@@ -1,0 +1,56 @@
+screenapi_bind:
+  - kind: RoleBinding
+    name: screenapi
+    namespace: screenapi
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns_screenapi_rw
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: Role  
+      name: screenapi
+      apiGroup: rbac.authorization.k8s.io
+
+screenapi_role:
+  - kind: Role
+    name: screenapi
+    namespace: screenapi
+    rules:
+      - apiGroups: 
+          - "apps"
+        resources:
+          - "deployments" 
+          - "replicasets"
+        verbs:
+          - "get"
+          - "update"
+          - "patch"
+          - "list"
+          - "watch"
+      - apiGroups:
+          - ""
+        resources:
+          - "configmaps"
+        verbs:
+          - "get"
+          - "list"
+          - "watch"
+          - "create"
+          - "update"
+          - "patch"
+          - "delete"
+      - apiGroups:
+          - ""
+        resources:
+          - "pods"
+        verbs:
+          - "get" 
+          - "list"
+          - "watch"
+          - "delete"
+      - apiGroups:
+          - ""
+        resources: 
+          - "pods/log"
+        verbs:
+          - "get"

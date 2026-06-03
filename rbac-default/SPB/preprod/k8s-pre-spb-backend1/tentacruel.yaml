@@ -1,0 +1,12 @@
+tentacruelRoleBindings:
+  - kind: RoleBinding
+    name: tentacruel
+    namespace: tentacruel
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-tentacruel_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

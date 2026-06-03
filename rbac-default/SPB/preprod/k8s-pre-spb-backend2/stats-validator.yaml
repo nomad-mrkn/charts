@@ -1,0 +1,12 @@
+stats-validatorRoleBindings:
+  - kind: RoleBinding
+    name: stats-validator
+    namespace: stats-validator
+    subjects: 
+      - kind: Group
+        ldapGroup: k8s_pre_ns-stats-validator_rw 
+        apiGroup: rbac.authorization.k8s.io
+    roleRef:
+      kind: ClusterRole  
+      name: default-cluster-role-rw
+      apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,18 @@
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: mesh-default
+spec:
+  accessLogging:
+  - providers:
+    - name: waypoint-logs-json
+---
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: enable-access-logging
+  namespace: istio-system
+spec:
+  accessLogging:
+    - providers:
+      - name: envoy

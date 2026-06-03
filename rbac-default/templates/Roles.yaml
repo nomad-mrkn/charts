@@ -1,0 +1,33 @@
+{{- $allRoles := list -}}
+{{- if and .Values.roles (kindIs "slice" .Values.roles) -}}
+  {{- range .Values.roles -}}
+    {{- $allRoles = append $allRoles (deepCopy .) -}}
+  {{- end -}}
+{{- end -}}
+{{- range $k, $v := .Values -}}
+  {{- if and (ne $k "roles") (kindIs "slice" $v) -}}
+    {{- $first := first $v -}}
+    {{- if and $first (hasKey $first "rules") -}}
+      {{- range $v -}}
+        {{- $allRoles = append $allRoles (deepCopy .) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- range $allRoles -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ .kind }}
+metadata:
+  name: {{ .name }}
+  {{- if and (eq .kind "Role") (.namespace) }}
+  namespace: {{ .namespace }}
+  {{- end }}
+rules:
+{{- range .rules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 4 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+{{- end }}
+---
+{{- end -}}

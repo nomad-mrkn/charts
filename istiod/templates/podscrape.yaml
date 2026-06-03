@@ -1,0 +1,18 @@
+
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMPodScrape
+metadata:
+  name: waypoint-scrape
+  namespace: {{ .Release.Namespace }}
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+      scheme:
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-class-name: istio-waypoint

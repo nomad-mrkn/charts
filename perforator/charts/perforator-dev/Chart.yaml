@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 0.0.0
+dependencies:
+- condition: clickhouse.enabled
+  name: clickhouse
+  repository: ""
+  version: 7.x.x
+description: Use this chart to deploy postgresql, clickhouse, minio for testing purposes
+name: perforator-dev
+type: application
+version: 0.0.0
