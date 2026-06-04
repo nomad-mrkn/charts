@@ -15,7 +15,15 @@ rules:
 
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [clusterroles, clusterrolebindings, roles, rolebindings]
-  verbs: [get, list, create, update, patch, delete]
+  verbs: [get, list, create, update, patch]
+
+- apiGroups: [coordination.k8s.io]
+  resources: [leases]
+  verbs: [get, list, watch, create, update, patch]
+
+- apiGroups: [networking.istio.io]
+  resources: [gateways]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [admissionregistration.k8s.io]
   resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations, validatingadmissionpolicies, validatingadmissionpolicybindings]
@@ -46,5 +54,5 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [operator.victoriametrics.com]
-  resources: [vmservicescrapes]
+  resources: [vmservicescrapes, vmpodscrapes]
   verbs: [create, update, patch, get, list, watch]
