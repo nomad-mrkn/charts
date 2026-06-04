@@ -1,4 +1,4 @@
-namespace: vault-operator
+namespace: vault-secrets-operator
 roleName: argocd-manager-vault-operator
 rules:
 - apiGroups: [apps]
