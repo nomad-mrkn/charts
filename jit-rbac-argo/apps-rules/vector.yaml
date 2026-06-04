@@ -1,4 +1,4 @@
-namespace: vector
+namespace: kube-system
 roleName: argocd-manager-vector
 rules:
 - apiGroups: [apps]
