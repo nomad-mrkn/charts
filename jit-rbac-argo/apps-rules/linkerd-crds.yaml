@@ -2,10 +2,7 @@ namespace: linkerd-crds
 roleName: argocd-manager-linkerd-crds
 rules:
 - apiGroups: ['']
-  resources:
-    - pods
-    - pods/log
-    - serviceaccounts
+  resources: [pods, pods/log, serviceaccounts]
   verbs: [get, list, create, update, patch]
 
 - apiGroups: [apiextensions.k8s.io]

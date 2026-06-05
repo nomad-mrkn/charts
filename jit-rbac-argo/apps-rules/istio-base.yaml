@@ -19,8 +19,3 @@ rules:
 - apiGroups: [""]
   resources: [namespaces]
   verbs: [get, list, watch]
-
-# chart does not create RBAC resources (only SA, webhooks, CRDs)
-# - apiGroups: [rbac.authorization.k8s.io]
-#   resources: [clusterroles, clusterrolebindings]
-#   verbs: [get, list, create, update, patch, delete]

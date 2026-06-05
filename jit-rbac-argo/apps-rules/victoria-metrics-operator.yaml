@@ -22,11 +22,7 @@ rules:
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [apps]
-  resources:
-    - deployments
-    - replicasets
-    - statefulsets
-    - daemonsets
+  resources: [deployments, replicasets, statefulsets, daemonsets]
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [""]

@@ -1,11 +1,6 @@
 namespace: jenkins
 roleName: argocd-manager-rbac-jenkins
 rules:
-# chart (rbac-default) only creates Role/ClusterRole/Bindings, no core resources
-# - apiGroups: ['']
-#   resources: [serviceaccounts, secrets, pods, pods/log]
-#   verbs: [create, update, patch, get, list, watch]
-
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [roles, rolebindings]
   verbs: [get, list, create, update, patch]

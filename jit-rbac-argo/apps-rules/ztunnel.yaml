@@ -17,11 +17,7 @@ rules:
   verbs: [get, list, watch]
 
 - apiGroups: [rbac.authorization.k8s.io]
-  resources:
-    - clusterroles
-    - clusterrolebindings
-    # - roles         # chart does not create namespace-scoped Role resources
-    # - rolebindings  # chart does not create namespace-scoped RoleBinding resources
+  resources: [clusterroles, clusterrolebindings]
   verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [""]

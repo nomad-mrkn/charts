@@ -4,8 +4,3 @@ rules:
 - apiGroups: ['']
   resources: [serviceaccounts, secrets, pods, pods/log]
   verbs: [create, update, patch, get, list]
-
-# chart creates ClusterRole/ClusterRoleBinding, not namespace-scoped Role/RoleBinding
-# - apiGroups: [rbac.authorization.k8s.io]
-#   resources: [roles, rolebindings]
-#   verbs: [get, list, create, update, patch]

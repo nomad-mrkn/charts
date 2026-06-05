@@ -10,9 +10,7 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: ['']
-  resources:
-    - namespaces
-    # - secrets  # needed at runtime by exporter, not during chart deployment
+  resources: [namespaces]
   verbs: [get, list, watch]
 
 - apiGroups: [rbac.authorization.k8s.io]
