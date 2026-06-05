@@ -10,13 +10,17 @@ rules:
   verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, pods, pods/log]
+  resources: [serviceaccounts]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
   resources: [namespaces]
   verbs: [get, list, watch]
 
-- apiGroups: [rbac.authorization.k8s.io]
-  resources: [clusterroles, clusterrolebindings]
-  verbs: [get, list, create, update, patch, delete]
+# chart does not create RBAC resources (only SA, webhooks, CRDs)
+# - apiGroups: [rbac.authorization.k8s.io]
+#   resources: [clusterroles, clusterrolebindings]
+#   verbs: [get, list, create, update, patch, delete]

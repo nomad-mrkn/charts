@@ -22,12 +22,19 @@ rules:
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [apps]
-  resources: [deployments, replicasets, statefulsets, daemonsets]
+  resources:
+    - deployments
+    - replicasets
+    # - statefulsets  # created by operator at runtime, not by Helm chart
+    # - daemonsets    # created by operator at runtime, not by Helm chart
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
+  resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list]
 
 - apiGroups: ['']
   resources: [configmaps/status]

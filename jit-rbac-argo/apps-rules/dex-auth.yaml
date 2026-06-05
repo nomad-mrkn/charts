@@ -6,13 +6,17 @@ rules:
     verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: [""]
-    resources: ["services", "configmaps", "secrets", "pods", "pods/log"]
+    resources: ["services", "configmaps", "secrets"]
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses"]
     verbs: ["create", "update", "patch", "get", "list", "watch"]
 
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["roles", "rolebindings"]
-    verbs: ["get", "list", "create", "update", "patch"]
+  # chart does not create any RBAC resources
+  # - apiGroups: ["rbac.authorization.k8s.io"]
+  #   resources: ["roles", "rolebindings"]
+  #   verbs: ["get", "list", "create", "update", "patch"]

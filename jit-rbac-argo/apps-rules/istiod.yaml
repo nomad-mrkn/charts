@@ -2,12 +2,20 @@ namespace: istio-system
 roleName: argocd-manager-istiod
 rules:
 - apiGroups: [apps]
-  resources: [deployments, replicasets]
+  resources: [deployments]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [apps]
+  resources: [replicasets]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services, configmaps, secrets, endpoints, pods, pods/log]
+  resources: [serviceaccounts, services, configmaps]
+  # secrets — chart does not create Secret resources
+  # endpoints — chart uses EndpointSlice (discovery.k8s.io), not Endpoints
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
   resources: [namespaces]

@@ -13,9 +13,10 @@ rules:
   resources: [clusterroles, clusterrolebindings, roles, rolebindings]
   verbs: [get, list, create, update, patch, delete]
 
-- apiGroups: [coordination.k8s.io]
-  resources: [leases]
-  verbs: [create, update, patch, get, list, watch]
+# leases referenced in chart's Role template, but ArgoCD doesn't create Lease objects
+# - apiGroups: [coordination.k8s.io]
+#   resources: [leases]
+#   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [policy]
   resources: [poddisruptionbudgets]

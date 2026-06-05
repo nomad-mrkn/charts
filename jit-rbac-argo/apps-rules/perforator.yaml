@@ -2,12 +2,18 @@ namespace: perforator
 roleName: argocd-manager-perforator
 rules:
 - apiGroups: [apps]
-  resources: [deployments, daemonsets, replicasets]
+  resources: [deployments, daemonsets]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [apps]
+  resources: [replicasets]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
+  resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
   resources: [namespaces]

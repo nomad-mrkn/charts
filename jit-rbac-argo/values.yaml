@@ -1,5 +1,5 @@
 syncWave: "-1"
-hookDeletePolicy: HookFailed
+hookDeletePolicy: HookSucceeded,HookFailed
 
 namespace: ""
 serviceAccountName: argocd-manager

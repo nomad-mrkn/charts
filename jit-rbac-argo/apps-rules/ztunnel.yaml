@@ -6,15 +6,22 @@ rules:
   verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, pods, pods/log]
+  resources: [serviceaccounts]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
   resources: [namespaces, nodes]
   verbs: [get, list, watch]
 
 - apiGroups: [rbac.authorization.k8s.io]
-  resources: [clusterroles, clusterrolebindings, roles, rolebindings]
+  resources:
+    - clusterroles
+    - clusterrolebindings
+    # - roles         # chart does not create namespace-scoped Role resources
+    # - rolebindings  # chart does not create namespace-scoped RoleBinding resources
   verbs: [get, list, create, update, patch, delete]
 
 - apiGroups: [""]

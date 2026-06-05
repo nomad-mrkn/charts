@@ -6,8 +6,11 @@ rules:
   verbs: [create, update, patch, get, list, watch, delete]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, configmaps, pods, pods/log]
+  resources: [serviceaccounts, configmaps]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
   resources: [namespaces, nodes]

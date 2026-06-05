@@ -10,8 +10,11 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services, pods, pods/log]
+  resources: [serviceaccounts, services]
   verbs: [create, update, patch, get, list, watch, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [rbac.authorization.k8s.io]
   resources: [roles, rolebindings]

@@ -33,10 +33,12 @@ rules:
   resources: [vmservicescrapes]
   verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [authentication.k8s.io]
-  resources: [tokenreviews]
-  verbs: [create]
+# runtime API used by operator, not needed for chart deployment
+# - apiGroups: [authentication.k8s.io]
+#   resources: [tokenreviews]
+#   verbs: [create]
 
-- apiGroups: [authorization.k8s.io]
-  resources: [subjectaccessreviews]
-  verbs: [create]
+# runtime API used by operator, not needed for chart deployment
+# - apiGroups: [authorization.k8s.io]
+#   resources: [subjectaccessreviews]
+#   verbs: [create]

@@ -2,13 +2,17 @@ namespace: linkerd-crds
 roleName: argocd-manager-linkerd-crds
 rules:
 - apiGroups: ['']
-  resources: [pods, pods/log, serviceaccounts]
+  resources:
+    - pods
+    - pods/log
+    # - serviceaccounts  # chart only creates CRDs, no ServiceAccounts
   verbs: [get, list, create, update, patch]
 
 - apiGroups: [apiextensions.k8s.io]
   resources: [customresourcedefinitions]
   verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [rbac.authorization.k8s.io]
-  resources: [clusterroles, clusterrolebindings]
-  verbs: [get, list, watch, delete]
+# chart only creates CRDs, no RBAC resources
+# - apiGroups: [rbac.authorization.k8s.io]
+#   resources: [clusterroles, clusterrolebindings]
+#   verbs: [get, list, watch, delete]

@@ -6,5 +6,8 @@ rules:
   verbs: [create, update, patch, get, list, delete]
 
 - apiGroups: [""]
-  resources: [configmaps, serviceaccounts, pods, pods/log]
+  resources: [configmaps, serviceaccounts]
   verbs: [create, update, patch, get, list, delete]
+- apiGroups: [""]
+  resources: [pods, pods/log]
+  verbs: [create, update, patch, get, list]
