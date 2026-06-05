@@ -4,6 +4,7 @@ rules:
 - apiGroups: [apps]
   resources: [deployments, daemonsets]
   verbs: [create, update, patch, get, list, watch, delete]
+
 - apiGroups: [apps]
   resources: [replicasets]
   verbs: [create, update, patch, get, list, watch]
@@ -11,6 +12,7 @@ rules:
 - apiGroups: [""]
   resources: [serviceaccounts, services, configmaps, secrets]
   verbs: [create, update, patch, get, list, watch, patch, delete]
+
 - apiGroups: [""]
   resources: [pods, pods/log]
   verbs: [create, update, patch, get, list, watch]
