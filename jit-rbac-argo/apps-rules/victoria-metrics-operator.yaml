@@ -25,7 +25,7 @@ rules:
   resources:
     - deployments
     - replicasets
-    # - statefulsets  # created by operator at runtime, not by Helm chart
+    - statefulsets
     - daemonsets
   verbs: [create, update, patch, get, list]
 
