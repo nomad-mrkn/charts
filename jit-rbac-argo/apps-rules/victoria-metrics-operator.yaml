@@ -26,7 +26,7 @@ rules:
     - deployments
     - replicasets
     # - statefulsets  # created by operator at runtime, not by Helm chart
-    # - daemonsets    # created by operator at runtime, not by Helm chart
+    - daemonsets
   verbs: [create, update, patch, get, list]
 
 - apiGroups: [""]
