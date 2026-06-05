@@ -9,8 +9,7 @@ rules:
   verbs: [create, update, patch, get, list, watch]
 
 - apiGroups: [""]
-  resources: [serviceaccounts, services, configmaps]
-  # secrets — chart does not create Secret resources
+  resources: [serviceaccounts, services, configmaps, secrets]
   # endpoints — chart uses EndpointSlice (discovery.k8s.io), not Endpoints
   verbs: [create, update, patch, get, list, watch, delete]
 - apiGroups: [""]
