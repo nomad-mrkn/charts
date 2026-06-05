@@ -1,4 +1,4 @@
-syncWave: "-1"
+syncWave: "-20"
 hookDeletePolicy: HookSucceeded,HookFailed
 
 namespace: ""
