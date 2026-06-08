@@ -1,42 +1,43 @@
 namespace: perforator
 roleName: argocd-manager-perforator
 rules:
-- apiGroups: [apps]
-  resources: [deployments, daemonsets]
-  verbs: [create, update, patch, get, list, watch, delete]
+  - apiGroups: [apps]
+    resources: [deployments, daemonsets]
+    verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [apps]
-  resources: [replicasets]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [apps]
+    resources: [replicasets]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [""]
-  resources: [serviceaccounts, services, configmaps, secrets]
-  verbs: [create, update, patch, get, list, watch, delete]
+  - apiGroups: [""]
+    resources: [serviceaccounts, services, configmaps, secrets]
+    verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [""]
-  resources: [pods, pods/log]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [""]
+    resources: [pods, pods/log]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [""]
-  resources: [namespaces]
-  verbs: [get, list, watch]
+  - apiGroups: [batch]
+    resources: [jobs]
+    verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [rbac.authorization.k8s.io]
-  resources: [clusterroles, clusterrolebindings]
-  verbs: [get, list, create, update, patch]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingresses]
+    verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [batch]
-  resources: [jobs]
-  verbs: [create, update, patch, get, list, watch, delete]
+  - apiGroups: [monitoring.coreos.com]
+    resources: [servicemonitors]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [networking.k8s.io]
-  resources: [ingresses]
-  verbs: [create, update, patch, get, list, watch, delete]
+  - apiGroups: [cert-manager.io]
+    resources: [certificates]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [monitoring.coreos.com]
-  resources: [servicemonitors]
-  verbs: [create, update, patch, get, list, watch]
-
-- apiGroups: [cert-manager.io]
-  resources: [certificates]
-  verbs: [create, update, patch, get, list, watch]
+clusterRules:
+  - apiGroups: [""]
+    resources: [namespaces]
+    verbs: [get, list, watch]
+    
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterroles, clusterrolebindings]
+    verbs: [get, list, create, update, patch]

@@ -1,29 +1,31 @@
 namespace: istio-system
 roleName: argocd-manager-ztunnel
 rules:
-- apiGroups: [apps]
-  resources: [daemonsets]
-  verbs: [create, update, patch, get, list, watch, delete]
+  - apiGroups: [apps]
+    resources: [daemonsets]
+    verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [""]
-  resources: [serviceaccounts]
-  verbs: [create, update, patch, get, list, watch, delete]
-- apiGroups: [""]
-  resources: [pods, pods/log]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [""]
+    resources: [serviceaccounts]
+    verbs: [create, update, patch, get, list, watch, delete]
 
-- apiGroups: [""]
-  resources: [namespaces, nodes]
-  verbs: [get, list, watch]
+  - apiGroups: [""]
+    resources: [pods, pods/log]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [rbac.authorization.k8s.io]
-  resources: [clusterroles, clusterrolebindings]
-  verbs: [get, list, create, update, patch, delete]
+  - apiGroups: [""]
+    resources: [resourcequotas]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [""]
-  resources: [resourcequotas]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [operator.victoriametrics.com]
+    resources: [vmpodscrapes]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [operator.victoriametrics.com]
-  resources: [vmpodscrapes]
-  verbs: [create, update, patch, get, list, watch]
+clusterRules:
+  - apiGroups: [""]
+    resources: [namespaces, nodes]
+    verbs: [get, list, watch]
+    
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterroles, clusterrolebindings]
+    verbs: [get, list, create, update, patch, delete]

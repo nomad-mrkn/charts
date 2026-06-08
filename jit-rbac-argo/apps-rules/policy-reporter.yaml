@@ -1,26 +1,31 @@
 namespace: kyverno
 roleName: argocd-manager-policy-reporter
 rules:
-- apiGroups: [apps]
-  resources: [deployments, replicasets]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [apps]
+    resources: [deployments, replicasets]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: ['']
-  resources: [serviceaccounts, services, secrets, pods, pods/log]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: ['']
+    resources: [serviceaccounts, services, secrets, pods, pods/log]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [rbac.authorization.k8s.io]
-  resources: [clusterroles, clusterrolebindings, roles, rolebindings]
-  verbs: [get, list, create, update, patch, delete]
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [roles, rolebindings]
+    verbs: [get, list, create, update, patch, delete]
 
-- apiGroups: [policy]
-  resources: [poddisruptionbudgets]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [policy]
+    resources: [poddisruptionbudgets]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [networking.k8s.io]
-  resources: [ingresses, networkpolicies]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingresses, networkpolicies]
+    verbs: [create, update, patch, get, list, watch]
 
-- apiGroups: [batch]
-  resources: [cronjobs]
-  verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [batch]
+    resources: [cronjobs]
+    verbs: [create, update, patch, get, list, watch]
+    
+clusterRules:
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterroles, clusterrolebindings]
+    verbs: [get, list, create, update, patch, delete]
