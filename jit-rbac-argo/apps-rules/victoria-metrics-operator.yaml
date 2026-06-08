@@ -68,4 +68,4 @@ clusterRules:
     
   - apiGroups: [rbac.authorization.k8s.io]
     resources: [clusterroles, clusterrolebindings]
-    verbs: [get, list, create, update, patch, delete]
+    verbs: [get, list, create, update, patch]
