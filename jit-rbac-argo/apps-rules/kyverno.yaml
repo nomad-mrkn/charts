@@ -42,10 +42,6 @@ clusterRules:
     resources: [customresourcedefinitions]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [rbac.authorization.k8s.io]
-    resources: [clusterroles, clusterrolebindings]
-    verbs: [get, list, create, update, patch, delete]
-
   - apiGroups: [admissionregistration.k8s.io]
     resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations]
     verbs: [create, update, patch, get, list, watch]
