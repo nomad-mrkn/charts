@@ -8,4 +8,4 @@ rules:
 clusterRules:
   - apiGroups: ['']
     resources: [secrets]
-    verbs: [get]
+    verbs: [create, get]
