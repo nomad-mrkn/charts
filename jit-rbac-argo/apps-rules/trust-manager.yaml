@@ -22,7 +22,7 @@ rules:
     verbs: [get, list, create, update, patch, delete]
 
   - apiGroups: [cert-manager.io]
-    resources: [certificates]
+    resources: [certificates, issuer]
     verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [policy]
@@ -54,6 +54,3 @@ clusterRules:
     resources: [bundles]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  - apiGroups: [cert-manager.io]
-    resources: [issuer]
-    verbs: [create, update, patch, get, list, watch]
