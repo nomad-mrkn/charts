@@ -11,7 +11,7 @@ rules:
 
   - apiGroups: [""]
     resources: [serviceaccounts, services, configmaps, secrets]
-    verbs: [create, update, patch, get, list, watch, delete]
+    verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [""]
     resources: [pods, pods/log]
@@ -54,3 +54,6 @@ clusterRules:
     resources: [bundles]
     verbs: [create, update, patch, get, list, watch, delete]
 
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [get]
