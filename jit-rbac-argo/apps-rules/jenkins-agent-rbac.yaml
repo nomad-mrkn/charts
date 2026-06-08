@@ -3,4 +3,4 @@ roleName: argocd-manager-jenkins-agent-rbac
 clusterRules:
 - apiGroups: ['']
   resources: [serviceaccounts, secrets, pods, pods/log]
-  verbs: [create, update, patch, get, list]
+  verbs: [create, update, patch, get]
