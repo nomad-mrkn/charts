@@ -5,9 +5,9 @@ rules:
     resources: [deployments, replicasets]
     verbs: [create, update, patch, get, list, watch]
     
-  # - apiGroups: ['']
-  #   resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
-  #   verbs: [create, update, patch, get, list, watch]
+  - apiGroups: ['']
+    resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
+    verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [coordination.k8s.io]
     resources: [leases]
@@ -35,5 +35,5 @@ clusterRules:
     verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: ['']
-    resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
-    verbs: [create, update, patch, get, list, watch]
+    resources: [secrets]
+    verbs: [get]
