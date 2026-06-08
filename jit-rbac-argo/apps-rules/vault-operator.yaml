@@ -5,17 +5,17 @@ rules:
     resources: [deployments, replicasets]
     verbs: [create, update, patch, get, list, watch]
     
-  - apiGroups: ['']
-    resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
-    verbs: [create, update, patch, get, list, watch]
+  # - apiGroups: ['']
+  #   resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
+  #   verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [coordination.k8s.io]
     resources: [leases]
     verbs: [create, update, patch, get, list, watch]
 
-  # - apiGroups: [ricoberger.de]
-  #   resources: [vaultsecrets]
-  #   verbs: [create, update, patch, get, list, watch]
+  - apiGroups: [ricoberger.de]
+    resources: [vaultsecrets]
+    verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [monitoring.coreos.com]
     resources: [servicemonitors]
@@ -34,6 +34,6 @@ clusterRules:
     resources: [customresourcedefinitions]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [ricoberger.de]
-    resources: [vaultsecrets]
+  - apiGroups: ['']
+    resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
     verbs: [create, update, patch, get, list, watch]
