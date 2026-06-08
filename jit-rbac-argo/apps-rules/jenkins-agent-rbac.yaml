@@ -2,7 +2,7 @@ namespace: jenkins-agent
 roleName: argocd-manager-jenkins-agent-rbac
 rules:
 - apiGroups: ['']
-  resources: [serviceaccounts, secrets, pods, pods/log]
+  resources: [serviceaccounts, pods, pods/log]
   verbs: [create, update, patch, get, list]
 
 clusterRules:
