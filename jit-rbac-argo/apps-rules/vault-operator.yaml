@@ -13,9 +13,9 @@ rules:
     resources: [leases]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [ricoberger.de]
-    resources: [vaultsecrets]
-    verbs: [create, update, patch, get, list, watch]
+  # - apiGroups: [ricoberger.de]
+  #   resources: [vaultsecrets]
+  #   verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [monitoring.coreos.com]
     resources: [servicemonitors]
@@ -32,4 +32,8 @@ clusterRules:
 
   - apiGroups: [apiextensions.k8s.io]
     resources: [customresourcedefinitions]
+    verbs: [create, update, patch, get, list, watch]
+
+  - apiGroups: [ricoberger.de]
+    resources: [vaultsecrets]
     verbs: [create, update, patch, get, list, watch]
