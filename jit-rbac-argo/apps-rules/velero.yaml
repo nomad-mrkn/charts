@@ -15,7 +15,7 @@ rules:
 
   - apiGroups: [velero.io]
     resources: [backupstoragelocations, volumesnapshotlocations, schedules]
-    verbs: [create, update, patch, get, list, watch]
+    verbs: [create, update, patch, get, list, watch, delete]
 
   - apiGroups: [rbac.authorization.k8s.io]
     resources: [roles, rolebindings]
