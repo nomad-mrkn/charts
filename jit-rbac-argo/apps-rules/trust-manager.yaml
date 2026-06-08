@@ -10,7 +10,7 @@ rules:
     verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [""]
-    resources: [serviceaccounts, services, configmaps, secrets]
+    resources: [serviceaccounts, services, configmaps]
     verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [""]
@@ -21,9 +21,9 @@ rules:
     resources: [roles, rolebindings]
     verbs: [get, list, create, update, patch, delete]
 
-  - apiGroups: [cert-manager.io]
-    resources: [certificates, issuer]
-    verbs: [create, update, patch, get, list, watch]
+  # - apiGroups: [cert-manager.io]
+  #   resources: [certificates, issuer]
+  #   verbs: [create, update, patch, get, list, watch]
 
   - apiGroups: [policy]
     resources: [poddisruptionbudgets]
@@ -57,3 +57,8 @@ clusterRules:
   - apiGroups: [""]
     resources: [secrets]
     verbs: [get]
+
+  - apiGroups: [cert-manager.io]
+    resources: [certificates, issuer]
+    verbs: [create, update, patch, get, list, watch]
+    
