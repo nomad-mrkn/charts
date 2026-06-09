@@ -13,4 +13,4 @@ markerRole:
   enabled: true
   rules: []
 
-image: bitnami/kubectl:latest
+image: registry.playteam.ru/bitnami/kubectl:1.24.14-debian-11-r3
