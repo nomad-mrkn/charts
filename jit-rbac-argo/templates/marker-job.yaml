@@ -35,15 +35,11 @@ spec:
           - |
             set -euo pipefail
             echo "Marking sync completed for ${JIT_RBAC_APP}"
-            kubectl label clusterrole -l jit-rbac/app=${JIT_RBAC_APP} \
+            kubectl label clusterrole,clusterrolebinding \
+              -l jit-rbac/app=${JIT_RBAC_APP} \
               jit-rbac/sync-status=completed --overwrite || true
-            kubectl label clusterrolebinding -l jit-rbac/app=${JIT_RBAC_APP} \
-              jit-rbac/sync-status=completed --overwrite || true
-            kubectl label role -n "${POD_NAMESPACE}" -l jit-rbac/app=${JIT_RBAC_APP} \
-              jit-rbac/sync-status=completed --overwrite || true
-            kubectl label rolebinding -n "${POD_NAMESPACE}" -l jit-rbac/app=${JIT_RBAC_APP} \
-              jit-rbac/sync-status=completed --overwrite || true
-            kubectl label serviceaccount -n "${POD_NAMESPACE}" -l jit-rbac/app=${JIT_RBAC_APP} \
+            kubectl label role,rolebinding,serviceaccount \
+              -n "${POD_NAMESPACE}" -l jit-rbac/app=${JIT_RBAC_APP} \
               jit-rbac/sync-status=completed --overwrite
             echo "Done"
 {{- end }}
