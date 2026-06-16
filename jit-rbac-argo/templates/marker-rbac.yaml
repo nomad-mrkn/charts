@@ -24,11 +24,11 @@ rules:
 {{- else }}
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "roles"]
-    verbs: ["get", "list", "patch", "escalate"]
+    verbs: ["get", "list", "patch", "escalate", "bind"]
 
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterrolebindings", "rolebindings"]
-    verbs: ["get", "list", "patch", "bind"]
+    verbs: ["get", "list", "patch"]
 
   - apiGroups: [""]
     resources: ["serviceaccounts"]
