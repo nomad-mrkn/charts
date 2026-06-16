@@ -9,15 +9,15 @@ rules:
     resources: [replicasets]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts, services, configmaps, secrets]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [pods, pods/log]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts/token]
     verbs: [create]
 
@@ -42,6 +42,6 @@ clusterRules:
     resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations]
     verbs: [create, update, patch, get, list, watch, delete]
     
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [namespaces]
     verbs: [create, get, list, watch]

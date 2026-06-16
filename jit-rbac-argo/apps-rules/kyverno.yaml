@@ -1,11 +1,11 @@
 namespace: kyverno
 roleName: argocd-manager-kyverno
 rules:
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts, services, configmaps, secrets]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [pods, pods/log]
     verbs: [create, update, patch, get, list, watch]
 

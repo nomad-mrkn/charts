@@ -33,13 +33,13 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            set -euo pipefail
-            echo "Marking sync completed for ${JIT_RBAC_APP}"
+            set -eu
+            echo "Marking TTL cleanup for ${JIT_RBAC_APP}"
             kubectl label clusterrole,clusterrolebinding \
               -l jit-rbac/app=${JIT_RBAC_APP} \
-              jit-rbac/sync-status=completed --overwrite || true
+              cleanup.kyverno.io/ttl=10m --overwrite || true
             kubectl label role,rolebinding,serviceaccount \
               -n "${POD_NAMESPACE}" -l jit-rbac/app=${JIT_RBAC_APP} \
-              jit-rbac/sync-status=completed --overwrite
+              cleanup.kyverno.io/ttl=10m --overwrite
             echo "Done"
 {{- end }}

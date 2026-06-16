@@ -1,11 +1,11 @@
 namespace: istio-system
 roleName: argocd-manager-istio-base
 rules:
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [pods, pods/log]
     verbs: [create, update, patch, get, list, watch]
 
@@ -18,6 +18,6 @@ clusterRules:
     resources: [validatingwebhookconfigurations, validatingadmissionpolicies, validatingadmissionpolicybindings]
     verbs: [create, update, patch, get, list, watch, delete]
     
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [namespaces]
     verbs: [get, list, watch]

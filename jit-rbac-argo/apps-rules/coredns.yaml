@@ -5,7 +5,7 @@ rules:
     resources: [deployments, replicasets]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts, services, configmaps, pods, pods/log, events]
     verbs: [create, update, patch, get, list, watch]
     

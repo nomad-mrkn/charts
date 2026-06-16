@@ -1,17 +1,17 @@
 namespace: dex-k8s-authenticator
 roleName: argocd-manager-dex-k8s-authenticator
 rules:
-  - apiGroups: ["apps"]
-    resources: ["deployments", "replicasets"]
-    verbs: ["create", "update", "patch", "get", "list", "watch"]
+  - apiGroups: [apps]
+    resources: [deployments, replicasets]
+    verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [""]
-    resources: ["services", "configmaps", "secrets"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
-  - apiGroups: [""]
-    resources: ["pods", "pods/log"]
-    verbs: ["create", "update", "patch", "get", "list", "watch"]
+  - apiGroups: ['']
+    resources: [services, configmaps, secrets]
+    verbs: [create, update, patch, get, list, watch, delete]
+  - apiGroups: ['']
+    resources: [pods, pods/log]
+    verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: ["networking.k8s.io"]
-    resources: ["ingresses"]
-    verbs: ["create", "update", "patch", "get", "list", "watch"]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingresses]
+    verbs: [create, update, patch, get, list, watch]

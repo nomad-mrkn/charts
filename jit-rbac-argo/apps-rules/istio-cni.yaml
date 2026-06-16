@@ -5,15 +5,15 @@ rules:
     resources: [daemonsets]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts, configmaps]
     verbs: [create, update, patch, get, list, watch, delete]
     
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [pods, pods/log]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [namespaces, nodes]
     verbs: [get, list, watch]
 
@@ -25,7 +25,7 @@ rules:
     resources: [network-attachment-definitions]
     verbs: [create, update, patch, get, list, watch, delete]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [resourcequotas]
     verbs: [create, update, patch, get, list, watch]
 

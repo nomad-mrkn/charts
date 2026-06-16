@@ -5,7 +5,7 @@ rules:
     resources: [deployments, daemonsets]
     verbs: [create, update, patch, get, list, watch]
 
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [serviceaccounts, services, configmaps, secrets, pods, pods/log]
     verbs: [create, update, patch, get, list, watch]
 
@@ -30,7 +30,7 @@ rules:
     verbs: [create, update, patch, get, list, watch]
 
 clusterRules:
-  - apiGroups: [""]
+  - apiGroups: ['']
     resources: [namespaces]
     verbs: [create, get, list, watch]
 

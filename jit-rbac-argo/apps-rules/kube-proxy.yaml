@@ -5,10 +5,10 @@ rules:
   resources: [daemonsets]
   verbs: [create, update, patch, get, list, delete]
 
-- apiGroups: [""]
+- apiGroups: ['']
   resources: [configmaps, serviceaccounts]
   verbs: [create, update, patch, get, list, delete]
   
-- apiGroups: [""]
+- apiGroups: ['']
   resources: [pods, pods/log]
   verbs: [create, update, patch, get, list]

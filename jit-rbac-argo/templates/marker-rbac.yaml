@@ -23,11 +23,13 @@ rules:
 {{- toYaml .Values.markerRole.rules | nindent 2 }}
 {{- else }}
   - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["clusterroles", "clusterrolebindings"]
-    verbs: ["get", "list", "patch", "update", "bind", "escalate"]
+    resources: ["clusterroles", "roles"]
+    verbs: ["get", "list", "patch", "escalate"]
+
   - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["roles", "rolebindings"]
-    verbs: ["get", "list", "patch", "update"]
+    resources: ["clusterrolebindings", "rolebindings"]
+    verbs: ["get", "list", "patch", "bind"]
+
   - apiGroups: [""]
     resources: ["serviceaccounts"]
     verbs: ["get", "list", "patch"]
